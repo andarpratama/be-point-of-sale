@@ -9,16 +9,13 @@ class App {
    public app: Application
    private envPath = path.join(__dirname, '../env/dev.env');
    constructor() {
-<<<<<<< HEAD
-=======
-      dotenv.config({path: this.envPath})
->>>>>>> testing
       this.app = express()
       this.plugin()
       this.router()
    }
 
    protected plugin(): void{
+      dotenv.config({path: this.envPath})
       this.app.use(cors());
       this.app.use(express.json())
       this.app.use(express.urlencoded({ extended: true }))
