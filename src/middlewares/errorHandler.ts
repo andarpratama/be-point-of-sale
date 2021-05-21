@@ -19,10 +19,18 @@ class ErrorHandler {
                     'Username or Email Required: Your username or email is required to perform this action';
                 status = 'Unprocessable Entity';
                 break;
-            case 'Name and Email Required':
+            
+            case 'Name Required':
                 statusCode = 422;
                 message =
-                    'Name and Email Required: Your name and email is required to perform this action';
+                    'Name Required: Your name is required to perform this action';
+                status = 'Unprocessable Entity';
+             break;
+          
+            case 'Email Required':
+                statusCode = 422;
+                message =
+                    'Email Required: Your email is required to perform this action';
                 status = 'Unprocessable Entity';
              break;
           
@@ -40,7 +48,7 @@ class ErrorHandler {
                 status = 'Unprocessable Entity';
              break;
             case 'Invalid Email':
-                statusCode = 401;
+                statusCode = 422;
                 message =
                     'Invalid Email: Please input valid Email';
                 status = 'Unauthorized';
@@ -48,7 +56,7 @@ class ErrorHandler {
             case 'Email not Registered':
                 statusCode = 401;
                 message =
-                    'Invalid Email: Your email is wrong or not registerd';
+                    'Email not Registered: Your email is not registerd';
                 status = 'Unauthorized';
                 break;
             case 'Invalid Password':
@@ -88,7 +96,7 @@ class ErrorHandler {
             case 'All Input Required':
                 statusCode = 422;
                 message =
-                    'All Input Required: Please input all profile data';
+                    'All Input Required: Please input all input in this form';
                 status = 'Unprocessable Entity';
                 break;
                 

@@ -17,8 +17,11 @@ class Auth {
 
    static async signup(req: Request, res: Response, next: NextFunction) {
       try {
-            if (!req.body.name || !req.body.email) {
-               throw { name: 'Name and Email Required' };
+            if (!req.body.name) {
+               throw { name: 'Name Required' };
+            }
+            if (!req.body.email) {
+               throw { name: 'Email Required' };
             }
             if (!validator.isEmail(req.body.email)) {
                throw { name: 'Invalid Email' };
@@ -36,8 +39,10 @@ class Auth {
                 success: true,
                 message: 'Success Registration',
                 status: 'Created',
-                statusCode: 201
+                statusCode: 201,
+                data: newUser
             });
+            logging.info('SIGNUP', 'MESSAGE: Success Sigup')
         } catch (err) {
             next(err);
         }
@@ -86,14 +91,14 @@ class Auth {
                 success: true,
                 message: 'Login Success',
                 data: {
-                    userID: foundUser._id,
-                    userName: foundUser.name,
-                    bearerToken: `Bearer ${token}`,
+                    User: foundUser._id,
+                    Authorization: `Bearer ${token}`,
                     expiresIn: 3600,
                 },
                 status: 'OK',
                 statusCode: 200
             });
+            logging.info('SIGNIN', 'MESSAGE: Success Signin')
         } catch (err) {
             next(err);
         }

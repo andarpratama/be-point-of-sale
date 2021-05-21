@@ -3,7 +3,7 @@ import { APP, PORT } from '../../src/app';
 
 const signin = async (user: { email?: string; password?: string }) => {
     const userRegistered = await request(APP)
-        .post('/users/register')
+        .post('/api/v1/auth/signin')
         .send(user);
     return userRegistered;
 };
