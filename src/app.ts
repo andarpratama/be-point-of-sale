@@ -6,7 +6,7 @@ import path from 'path'
 class App {
    public app: Application
    private envPath = path.join(__dirname, '../env/dev.env');
-   constructor() { 
+   constructor() {
       this.app = express()
       this.plugin()
       this.router()
