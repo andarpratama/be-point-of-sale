@@ -1,4 +1,10 @@
-// TODO: Testing can create 
+import { sum } from "./helpers/test.helper";
+
+test('adds 1 + 2 to equal 3', () => {
+  expect(sum(1, 2)).toBe(3);
+});
+
+// TODO: Testing can create
 
 // TODO: Testing create input required
 

@@ -1,16 +1,15 @@
 import request from 'supertest';
-import App  from '../../app';
-const app = new App().app
+import { APP, PORT } from '../../src/app';
 
 const signin = async (user: { email?: string; password?: string }) => {
-    const userRegistered = await request(app)
+    const userRegistered = await request(APP)
         .post('/users/register')
         .send(user);
     return userRegistered;
 };
 
-const signup = async (user: { email?: string; password?: string }) => {
-    const userLogged = await request(app).post('/users/login').send(user);
+const signup = async (user: { name?: string; email?: string; password?: string }) => {
+    const userLogged = await request(APP).post('/api/v1/auth/signup').send(user);
     return userLogged;
 };
 

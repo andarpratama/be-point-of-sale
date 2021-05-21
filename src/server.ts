@@ -1,2 +1,5 @@
 import { APP, PORT } from '../src/app';
-APP.listen(PORT, () =>console.log(`Server is running http://localhost:${PORT}`))
+import loggin from './config/logging'
+APP.listen(PORT, () => {
+   loggin.info('SERVER', `MESSAGE: Server running on port http://localhost:${PORT}`)
+})
