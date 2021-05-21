@@ -8,6 +8,8 @@ import inventoryUnitRoute from "../routes/inventory.unit.route";
 import inventoryProductRoute from "../routes/inventory.product.route";
 import inventorySupplierRoute from "./inventory.supplier.route";
 import financePoRoute from "./finance.po.route";
+import financeInvoiceRoute from "./finance.invoice.route";
+import orderRoute from "./order.route";
 
 class Routes {
     router: Router;
@@ -21,6 +23,8 @@ class Routes {
         this.inventoryProduct();
         this.inventorySupplier();
         this.financePo();
+        this.financeInvoice();
+        this.order();
         this.errorHandler();
     }
 
@@ -67,7 +71,17 @@ class Routes {
     public financePo(): void {
         this.router.use("/api/v1/finance", financePoRoute);
     }
+    public financeInvoice(): void {
+        this.router.use("/api/v1/finance", financeInvoiceRoute);
+    }
     //====================END OF FINANCE ENDPOINT====================
+
+    //====================ORDER ENDPOINT====================
+    public order(): void {
+        this.router.use("/api/v1/order", orderRoute);
+    }
+    //====================END OF ORDER ENDPOINT====================
+
     public errorHandler(): void {
         this.router.use(ErrorHandler.handleErrors);
     }
