@@ -7,7 +7,6 @@ class mongooDB {
    public envPath = path.join(__dirname, '../../env/dev.env');
    constructor() {
       dotenv.config({ path: this.envPath })
-      console.log(process.env.DB_HOST)
    }
    
    public connectDB(): void {
