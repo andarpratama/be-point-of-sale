@@ -1,44 +1,33 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { BrandModel } from "../models/brand.model";
 
 class InventoryBrandController {
     //============================= CREATE REQUEST =============================
-    static async postInventoryBrand(req: Request, res: Response) {
+   static async postInventoryBrand(req: Request, res: Response, next: NextFunction) {
         const name = req.body.name;
 
         try {
             if (!name) {
-                res.status(403).json({
-                    success: false,
-                    statusCode: 403,
-                    responseStatus: "Status not OK",
-                    message: "Please Fill the Brand Name",
-                });
-            } else {
-                const newBrand = await BrandModel.create({
-                    name: name,
-                });
-                res.status(201).json({
-                    success: true,
-                    statusCode: 201,
-                    responseStatus: "Status OK",
-                    message: `Brand ${name} Created`,
-                    data: newBrand,
-                });
-            }
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                statusCode: 500,
-                responseStatus: "Status not OK",
-                message: "Failed to Create Brand Name",
+               throw { name: 'Input body Required' };
+            } 
+            const newBrand = await BrandModel.create({
+               name: name,
             });
+            res.status(201).json({
+               success: true,
+               statusCode: 201,
+               responseStatus: "Status OK",
+               message: `Brand ${name} Created`,
+               data: newBrand,
+            });
+        } catch (error) {
+            next(error)
         }
     }
     //============================= END OF CREATE REQUEST ======================
 
     //============================= READ REQUEST ===============================
-    static getInventoryBrand(req: Request, res: Response) {
+    static getInventoryBrand(req: Request, res: Response,next: NextFunction) {
         BrandModel.find()
             .then((resBrand) => {
                 res.status(201).json({
@@ -47,15 +36,12 @@ class InventoryBrandController {
                 });
             })
             .catch((err) => {
-                res.status(500).json({
-                    message: "Find All Brand Failed",
-                    data: err,
-                });
+                next(err)
             });
     }
     //============================= END OF READ REQUEST ========================
 
-    static async editInventoryBrand(req: Request, res: Response) {
+    static async editInventoryBrand(req: Request, res: Response, next: NextFunction) {
         const brandID = req.params.id;
         const name = req.body.name;
 
@@ -75,20 +61,18 @@ class InventoryBrandController {
                 data: updateName,
             });
         } catch (error) {
-            res.status(500).json({
-                success: false,
-                statusCode: 500,
-                responseStatus: "Status not OK",
-                message: "Update Brand Name Failed",
-            });
+            next(error)
         }
     }
 
-    static async deleteInventoryBrand(req: Request, res: Response) {
+    static async deleteInventoryBrand(req: Request, res: Response, next: NextFunction) {
         const brandID = req.params.id;
         const foundBrand = await BrandModel.findById(brandID);
 
         try {
+           if (!brandID) {
+              throw { name: 'Params Is Empty' };
+           }
             const updateStatus = await BrandModel.findByIdAndUpdate(
                 brandID,
                 { status: false, name: foundBrand?.name },
@@ -102,12 +86,7 @@ class InventoryBrandController {
                 data: updateStatus,
             });
         } catch (error) {
-            res.status(500).json({
-                success: false,
-                statusCode: 500,
-                responseStatus: "Status not OK",
-                message: "Delete Brand Failed",
-            });
+            next(error)
         }
     }
 }

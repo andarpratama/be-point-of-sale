@@ -127,6 +127,20 @@ class ErrorHandler {
                 status = 'Unauthorized';
              break;
           
+            case 'Params Is Empty':
+                statusCode = 404;
+                message =
+                    'Params Is Empty: Please cek yout endpoint with params';
+                status = 'Not Found';
+             break;
+          
+            case 'Input body Required':
+                statusCode = 404;
+                message =
+                    'Input body Required: Please input data in body';
+                status = 'Not Found';
+             break;
+          
             default:
                 statusCode = 500;
                 message = `Internal Server Error: Sorry, our server is in trouble`;
