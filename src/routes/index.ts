@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import ErrorHandler from "../middlewares/errorHandler";
-import logging from "../config/logging";
+
 import authRoute from "./auth.route";
 import userRoute from "../routes/user.route";
 import inventoryBrandRoute from "../routes/inventory.brand.route";
@@ -10,6 +10,7 @@ import inventorySupplierRoute from "./inventory.supplier.route";
 import financePoRoute from "./finance.po.route";
 import financeInvoiceRoute from "./finance.invoice.route";
 import orderRoute from "./order.route";
+import homeRoute from "./home.route";
 
 class Routes {
     router: Router;
@@ -27,32 +28,25 @@ class Routes {
         this.order();
         this.errorHandler();
     }
-
+    //====================HOME ENDPOINT====================
     public home() {
-        this.router.get("/", (req: Request, res: Response) => {
-            logging.info(
-                "HOME",
-                `METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`
-            );
-            res.status(200).json({
-                success: true,
-                statusCode: 200,
-                responseStatus: "Status OK",
-                message: "Welcome, this is API Pak Acong Store..",
-            });
-        });
+        this.router.get("/", homeRoute);
     }
+    //====================END OF HOME ENDPOINT=============
 
+    //====================AUTH ENDPOINT====================
     public auth(): void {
         this.router.use("/api/v1/auth", authRoute);
     }
+    //====================END OF AUTH ENDPOINT=============
+
     //====================USER ENDPOINT====================
     public user(): void {
         this.router.use("/api/v1/user", userRoute);
     }
-    //====================END OF USER ENDPOINT====================
+    //====================END OF USER ENDPOINT=============
 
-    //====================INVENTORY ENDPOINT====================
+    //====================INVENTORY ENDPOINT===============
     public inventoryBrand(): void {
         this.router.use("/api/v1/inventory", inventoryBrandRoute);
     }
@@ -65,26 +59,28 @@ class Routes {
     public inventorySupplier(): void {
         this.router.use("/api/v1/inventory", inventorySupplierRoute);
     }
-    //====================END OF INVENTORY ENDPOINT====================
+    //====================END OF INVENTORY ENDPOINT=========
 
-    //====================FINANCE ENDPOINT====================
+    //====================FINANCE ENDPOINT==================
     public financePo(): void {
         this.router.use("/api/v1/finance", financePoRoute);
     }
     public financeInvoice(): void {
         this.router.use("/api/v1/finance", financeInvoiceRoute);
     }
-    //====================END OF FINANCE ENDPOINT====================
+    //====================END OF FINANCE ENDPOINT===========
 
     //====================ORDER ENDPOINT====================
     public order(): void {
         this.router.use("/api/v1/order", orderRoute);
     }
-    //====================END OF ORDER ENDPOINT====================
+    //====================END OF ORDER ENDPOINT=============
 
+    //====================ERROR HANDLER=====================
     public errorHandler(): void {
         this.router.use(ErrorHandler.handleErrors);
     }
+    //====================END OF ERROR HANDLER==============
 }
 
 export default new Routes().router;

@@ -12,19 +12,19 @@ class UserRoutes {
     }
 
     public getAllUser(): void {
-        this.router.get("/user", UserController.getAllUser);
+        this.router.get("/", UserController.getAllUser);
     }
     public postBrand(): void {
         this.router.post("/brand", UserController.postBrand);
     }
     public editUser(): void {
-        this.router.patch("/user/:id", UserController.editUser);
+        this.router.patch("/:id", UserController.editUser);
     }
     public deleteUser(): void {
-        this.router.delete("/user/:id", UserController.deleteUser);
+        this.router.delete("/:id", UserController.deleteUser);
     }
     public getDetailUser(): void {
-        this.router.get("/user/:id", UserController.getDetailUser);
+        this.router.get("/:id", UserController.getDetailUser);
     }
 }
 
