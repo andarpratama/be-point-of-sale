@@ -1,30 +1,33 @@
 import { Router } from "express";
 import UserController from "../controllers/user.controller";
+import { authJwt } from "../middlewares/auth.jwt";
 
 class UserRoutes {
     router: Router;
     constructor() {
         this.router = Router();
         this.getAllUser();
-        this.postBrand();
+        this.authJwt();
         this.editUser();
         this.deleteUser();
+        this.getDetailUser()
+    }
+   
+    public authJwt():void {
+       this.router.use(authJwt.authentication)
     }
 
     public getAllUser(): void {
-        this.router.get("/user", UserController.getAllUser);
-    }
-    public postBrand(): void {
-        this.router.post("/brand", UserController.postBrand);
+        this.router.get("/", UserController.getAllUser);
     }
     public editUser(): void {
-        this.router.patch("/user/:id", UserController.editUser);
+        this.router.patch("/:id", UserController.editUser);
     }
     public deleteUser(): void {
-        this.router.delete("/user/:id", UserController.deleteUser);
+        this.router.delete("/:id", UserController.deleteUser);
     }
     public getDetailUser(): void {
-        this.router.get("/user/:id", UserController.getDetailUser);
+        this.router.get("/detail/:id", UserController.getDetailUser);
     }
 }
 

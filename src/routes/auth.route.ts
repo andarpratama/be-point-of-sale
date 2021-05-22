@@ -8,6 +8,8 @@ class AuthRoute {
       this.home()
       this.register()
       this.login()
+      this.forgotPassword()
+      this.resetPassword()
    }
 
    public home(): void {
@@ -22,7 +24,13 @@ class AuthRoute {
       this.router.post('/signin', authController.signin);
    }
 
-   
+   public forgotPassword(): void {
+      this.router.post('/forgot-password', authController.forgotPassword)
+   }
+
+   public resetPassword(): void {
+      this.router.get('/reset-password/:token', authController.resetPassword)
+   }
 
 }
 

@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import logging from '../config/logging'
 import validator from 'validator'
+import nodemailer from 'nodemailer'
 
 class Auth {
    constructor() {
@@ -13,6 +14,79 @@ class Auth {
 
    static home(req: Request, res: Response, err: ErrorRequestHandler) {
       res.status(200).json({ message: 'Auth / Home'})
+   }
+
+   static async forgotPassword(req: Request, res: Response, next: NextFunction) {
+      const { email } = req.body
+   
+      try {
+         const foundUser = await UserModel.findOne({ email })
+         const idUser = foundUser?._id
+         const tokenForgotPassword = jwt.sign({ _id: idUser }, "Assignment4", {
+            expiresIn: "5m",
+         });
+
+         const apiResetPassword = 'http://localhost:3030/api/v1/auth/reset-password/';
+
+         let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+               user: 'andar.salt@gmail.com',
+               pass: 'prathama354'
+            }
+         })
+
+         let mailOptions = {
+            from: 'andar.salt@gmail.com',
+            to: 'master.amarta@gmail.com',
+            subject: 'Reset Password',
+            text: 'Link Reset Password',
+            html: `Hai ${foundUser?.name}, silahkan klik link berikut : <br>
+                     <a href="${apiResetPassword}${tokenForgotPassword}" >Reset Password</a>
+                     <br>
+                   Link ini akan aktif selama, 30 menit. Setalah itu link akan nonaktif
+                  `
+         }
+
+         transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+               res.json({
+                  error: err
+               })
+            } else {
+               res.status(200).json({
+                  success: true,
+                  statusCode: 200,
+                  responseStatus: "Status OK",
+                  message: "Forgot password", 
+                  data: foundUser?._id,
+                  token: tokenForgotPassword,
+                  info: info.response
+               });
+            }
+         })
+   
+      } catch (error) {
+         next(error)
+      }
+      
+   }
+
+   static async resetPassword(req: Request, res: Response, next: NextFunction) {
+      const tokenResetPassword = req.params.token
+      try {
+         if (!tokenResetPassword) {
+            throw { name: 'Missing Token Reset Password' };
+         }
+         res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: "Berhasil reset password", 
+         });
+      } catch (error) {
+         next(error)
+      }
    }
 
    static async signup(req: Request, res: Response, next: NextFunction) {

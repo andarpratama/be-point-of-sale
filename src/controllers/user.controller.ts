@@ -2,20 +2,14 @@ import { Request, Response } from "express";
 import { UserModel } from "../models/user.model";
 
 class UserController {
-    static getAllUser(req: Request, res: Response) {
+    static async getAllUser(req: Request, res: Response) {
+        const allUser = await UserModel.find()
         res.status(200).json({
             success: true,
             statusCode: 200,
             responseStatus: "Status OK",
             message: "Get All User Data",
-        });
-    }
-    static postBrand(req: Request, res: Response) {
-        res.status(201).json({
-            success: true,
-            statusCode: 201,
-            responseStatus: "Status OK",
-            message: "Brand Created",
+            data: allUser
         });
     }
     static editUser(req: Request, res: Response) {
@@ -34,13 +28,20 @@ class UserController {
             message: "Delete User",
         });
     }
-    static getDetailUser(req: Request, res: Response) {
-        res.status(200).json({
-            success: true,
-            statusCode: 200,
-            responseStatus: "Status OK",
-            message: "Get Detail User",
-        });
+    static async getDetailUser(req: Request, res: Response) {
+       try {
+          const detailUser = await UserModel.findById(req.params.id)
+          return res.status(200).json({
+               success: true,
+               statusCode: 200,
+               responseStatus: "Status OK",
+               message: "Get Detail User",
+               data: detailUser
+          });
+       } catch (error) {
+          return res.json({error: error})
+       }
+       
     }
 }
 

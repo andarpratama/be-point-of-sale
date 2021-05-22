@@ -117,7 +117,16 @@ class ErrorHandler {
                 message =
                     'ValidationError: Make sure you have filled all the required fields with the valid data';
                 status = 'Unprocessable Entity';
-                break;
+             break;
+          
+            // COMMENT: Forgot and Reset Password
+            case 'Missing Token Reset Password':
+                statusCode = 401;
+                message =
+                    'Missing Access Token Reset Password: Please back to input your email and get the new link';
+                status = 'Unauthorized';
+             break;
+          
             default:
                 statusCode = 500;
                 message = `Internal Server Error: Sorry, our server is in trouble`;
