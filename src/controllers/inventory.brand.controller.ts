@@ -2,14 +2,7 @@ import { Request, Response } from "express";
 import { BrandModel } from "../models/brand.model";
 
 class InventoryBrandController {
-    static getInventoryBrand(req: Request, res: Response) {
-        res.status(200).json({
-            success: true,
-            statusCode: 200,
-            responseStatus: "Status OK",
-            message: "Get Inventory Brand Data",
-        });
-    }
+    //============================= CREATE REQUEST =============================
     static async postInventoryBrand(req: Request, res: Response) {
         const name = req.body.name;
 
@@ -42,14 +35,38 @@ class InventoryBrandController {
             });
         }
     }
+    //============================= END OF CREATE REQUEST ======================
+
+    //============================= READ REQUEST ===============================
+    static getInventoryBrand(req: Request, res: Response) {
+        BrandModel.find()
+            .then((resBrand) => {
+                res.status(201).json({
+                    message: "Success Find All Brand",
+                    data: resBrand,
+                });
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    message: "Find All Brand Failed",
+                    data: err,
+                });
+            });
+    }
+    //============================= END OF READ REQUEST ========================
+
     static async editInventoryBrand(req: Request, res: Response) {
         const brandID = req.params.id;
         const name = req.body.name;
 
         try {
-            const updateName = await BrandModel.findByIdAndUpdate(brandID, {
-                name: name,
-            });
+            const updateName = await BrandModel.findByIdAndUpdate(
+                brandID,
+                {
+                    name: name,
+                },
+                { new: true }
+            );
             res.status(200).json({
                 success: true,
                 statusCode: 200,
@@ -66,13 +83,32 @@ class InventoryBrandController {
             });
         }
     }
-    static deleteInventoryBrand(req: Request, res: Response) {
-        res.status(200).json({
-            success: true,
-            statusCode: 200,
-            responseStatus: "Status OK",
-            message: "Delete Inventory Brand",
-        });
+
+    static async deleteInventoryBrand(req: Request, res: Response) {
+        const brandID = req.params.id;
+        const foundBrand = await BrandModel.findById(brandID);
+
+        try {
+            const updateStatus = await BrandModel.findByIdAndUpdate(
+                brandID,
+                { status: false, name: foundBrand?.name },
+                { new: true }
+            );
+            res.status(200).json({
+                success: true,
+                statusCode: 200,
+                responseStatus: "Status OK",
+                message: "Delete Inventory Brand",
+                data: updateStatus,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                statusCode: 500,
+                responseStatus: "Status not OK",
+                message: "Delete Brand Failed",
+            });
+        }
     }
 }
 
