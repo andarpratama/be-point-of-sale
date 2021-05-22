@@ -25,7 +25,7 @@ class InventoryBrandRoutes {
     }
     public deleteInventoryBrand(): void {
         this.router.delete(
-            "/user/:id",
+            "/brand/:id",
             InventoryBrandController.deleteInventoryBrand
         );
     }

@@ -27,7 +27,7 @@ class UserRoutes {
         this.router.delete("/:id", UserController.deleteUser);
     }
     public getDetailUser(): void {
-        this.router.get("/detail/:id", UserController.getDetailUser);
+        this.router.get("/:id/detail", UserController.getDetailUser);
     }
 }
 

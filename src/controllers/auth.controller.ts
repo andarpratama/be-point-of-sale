@@ -83,7 +83,7 @@ class Auth {
             statusCode: 200,
             responseStatus: "Status OK",
             message: "Berhasil reset password", 
-         });
+         })
       } catch (error) {
          next(error)
       }
