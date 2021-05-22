@@ -24,6 +24,10 @@ const unitSchema = new Schema(
             type: Number,
             required: true,
         },
+        status: {
+            type: Boolean,
+            default: true,
+        },
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
