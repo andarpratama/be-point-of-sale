@@ -5,7 +5,7 @@ import { signin, signup } from './helpers/auth.helper';
 import { UserModel } from "../src/models/user.model";
 import { infoUser, infoUserMissingToken } from "./helpers/user.helper";
 
-describe('GET /users/:userID/info - User Info Endpoint', () => {
+describe('GET /users/:userID/detail - User Info Endpoint', () => {
     let userLoginResult: request.Response;
     beforeEach(async () => {
         const userRegistered = await signup({
@@ -99,6 +99,30 @@ describe('GET /users/:userID/info - User Info Endpoint', () => {
 });
 
 
+describe('GET /users/:userID/detail - User Update Endpoint', () => {
+   let userLoginResult: request.Response;
+    beforeEach(async () => {
+        const userRegistered = await signup({
+            name: 'Test',
+            email: 'test@gmail.com',
+            password: 'test123'
+        } as IUserRegister);
+        expect(userRegistered.status).toEqual(201);
+    });
+    beforeEach(async () => {
+        const userLogged = await signin({
+            email: 'test@gmail.com',
+            password: 'test123'
+        } as IUserLogin);
+       expect(userLogged.status).toEqual(200);
+       userLoginResult = userLogged
+    });
+    afterEach(async () => {
+        await UserModel.deleteMany();
+    });
+   
+   
+})
 
 // TODO: Testing can update
 

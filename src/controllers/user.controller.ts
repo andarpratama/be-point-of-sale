@@ -1,5 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import validator from "validator";
 import { UserModel } from "../models/user.model";
+import bcrypt from 'bcryptjs'
 
 class UserController {
     static async getAllUser(req: Request, res: Response) {
@@ -12,13 +14,38 @@ class UserController {
             data: allUser
         });
     }
-    static editUser(req: Request, res: Response) {
-        res.status(200).json({
-            success: true,
-            statusCode: 200,
-            responseStatus: "Status OK",
-            message: "Edit User",
-        });
+    static async editUser(req: Request, res: Response, next: NextFunction) {
+         const userId = req.params?.id
+         const {name, email, handphone, image} = req.body
+         let password = req.body.password
+         password = await bcrypt.hash(req.body.password, 8)
+         const updateData:any = {name, email, password, handphone, image}
+
+       try {
+            for (const item in updateData) {
+               if (!updateData[item]) {
+                  delete updateData[item]
+               }
+               if (updateData[item] === '') {
+                  throw { name: 'All Input Required' };
+               }
+            }
+            
+            const updatedUser = await UserModel.findByIdAndUpdate(userId, updateData, {new: true})
+            if (updatedUser) {
+               res.status(200).json({
+                  success: true,
+                  statusCode: 200,
+                  responseStatus: "Status OK",
+                  message: "Edit User",
+                  data: updatedUser
+               });
+            }
+            
+         } catch (error) {
+            next(error)
+         }
+         
     }
     static deleteUser(req: Request, res: Response) {
         res.status(200).json({

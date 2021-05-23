@@ -18,13 +18,21 @@ class Auth {
 
    static async forgotPassword(req: Request, res: Response, next: NextFunction) {
       const { email } = req.body
+      console.log(email)
    
       try {
          const foundUser = await UserModel.findOne({ email })
+         if (!foundUser) {
+            throw { name: 'Email not Registered' };
+         }
+         console.log(1)
          const idUser = foundUser?._id
-         const tokenForgotPassword = jwt.sign({ _id: idUser }, "Assignment4", {
+         console.log(idUser)
+         const tokenForgotPassword = jwt.sign({id: idUser}, "Assignment4", {
             expiresIn: "5m",
          });
+
+         console.log(tokenForgotPassword)
 
          const apiResetPassword = 'http://localhost:3030/api/v1/auth/reset-password/';
 
@@ -36,17 +44,43 @@ class Auth {
             }
          })
 
+
+         const buttonName = 'Reset Password'
+         const buttonHref = `${apiResetPassword}${tokenForgotPassword}/${idUser}`
+         const buttonReset = `<a href="${buttonHref}" style="padding: 13px 18px; border: none;border-radius: 5px; background-color: dodgerblue; color: white; font-size: 16px;text-decoration: none;font-family: sans-serif;" >${buttonName}</a>`
+
+         const emailMessage = `
+            <h1>Hai ${foundUser?.name}</h1>
+            You are recieving this email because we recivied as password reset request for your account.
+            <br>
+            <div style="width: 100%; text-align: center; margin-top: 20px;" >
+            ${buttonReset}
+            </div>
+            <br>
+
+            This link will be active for 10 minutes, after that link password reset will be expired
+            If you did not request a password request, no further action is required.
+            <br> <br>
+
+            Thankyou, <br>
+            <b>Acong Store</b>
+            <br> <br>
+
+            <hr>
+            If you are having trouble clicking the "Reset Password" button, copy and pase URL below into your web browser
+            <br>
+            ${buttonHref}
+         `
+
          let mailOptions = {
             from: 'andar.salt@gmail.com',
             to: 'master.amarta@gmail.com',
-            subject: 'Reset Password',
+            subject: 'Reset Password from ACONG STORE',
             text: 'Link Reset Password',
-            html: `Hai ${foundUser?.name}, silahkan klik link berikut : <br>
-                     <a href="${apiResetPassword}${tokenForgotPassword}" >Reset Password</a>
-                     <br>
-                   Link ini akan aktif selama, 30 menit. Setalah itu link akan nonaktif
-                  `
+            html: emailMessage
          }
+
+         console.log(3)
 
          transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
@@ -65,6 +99,8 @@ class Auth {
                });
             }
          })
+
+         console.log(4)
    
       } catch (error) {
          next(error)
@@ -74,10 +110,24 @@ class Auth {
 
    static async resetPassword(req: Request, res: Response, next: NextFunction) {
       const tokenResetPassword = req.params.token
+      const userId = req.params.id
+      console.log(userId)
       try {
          if (!tokenResetPassword) {
             throw { name: 'Missing Token Reset Password' };
          }
+         
+         const foundUser = await UserModel.findOne({_id: userId})
+         if (!foundUser) {
+            throw { name: 'ID not Registered' };
+         }
+         
+         jwt.verify(tokenResetPassword, "Assignment4", function (error, decodedData) {
+            if (error) {
+               throw { name: 'Access Token Expired' };
+            }
+         })
+         
          res.status(200).json({
             success: true,
             statusCode: 200,

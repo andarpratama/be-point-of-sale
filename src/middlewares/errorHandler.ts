@@ -85,10 +85,16 @@ class ErrorHandler {
                     'Missing Access Token: Please input your access token';
                 status = 'Unauthorized';
                 break;
-            case 'Access Token No Longer Registered':
+            case 'Access Token Expired':
                 statusCode = 401;
                 message =
-                    'Access Token No Longer Registered: The access token is no longer registered, please register and re-login to get a new access token';
+                    'Access Token Expired: The access token is expired';
+                status = 'Unauthorized';
+                break;
+            case 'ID not Registered':
+                statusCode = 401;
+                message =
+                    'ID not Registered: Your ID is not registerd';
                 status = 'Unauthorized';
                 break;
                 

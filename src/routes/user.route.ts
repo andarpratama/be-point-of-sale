@@ -1,6 +1,7 @@
 import { Router } from "express";
 import UserController from "../controllers/user.controller";
 import { authJwt } from "../middlewares/auth.jwt";
+import ErrorHandler from "../middlewares/errorHandler";
 
 class UserRoutes {
     router: Router;
@@ -11,6 +12,7 @@ class UserRoutes {
         this.editUser();
         this.deleteUser();
         this.getDetailUser()
+        this.errorHandler()
     }
    
     public authJwt():void {
@@ -29,6 +31,11 @@ class UserRoutes {
     public getDetailUser(): void {
         this.router.get("/:id/detail", UserController.getDetailUser);
     }
+   
+   public errorHandler(): void {
+        this.router.use(ErrorHandler.handleErrors);
+    }
+    
 }
 
 export default new UserRoutes().router;
