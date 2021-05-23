@@ -3,31 +3,35 @@ import { BrandModel } from "../models/brand.model";
 
 class InventoryBrandController {
     //============================= CREATE REQUEST =============================
-   static async postInventoryBrand(req: Request, res: Response, next: NextFunction) {
+    static async postInventoryBrand(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
         const name = req.body.name;
 
         try {
             if (!name) {
-               throw { name: 'Input body Required' };
-            } 
+                throw { name: "Input body Required" };
+            }
             const newBrand = await BrandModel.create({
-               name: name,
+                name: name,
             });
             res.status(201).json({
-               success: true,
-               statusCode: 201,
-               responseStatus: "Status OK",
-               message: `Brand ${name} Created`,
-               data: newBrand,
+                success: true,
+                statusCode: 201,
+                responseStatus: "Status OK",
+                message: `Brand ${name} Created`,
+                data: newBrand,
             });
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
     //============================= END OF CREATE REQUEST ======================
 
     //============================= READ REQUEST ===============================
-    static getInventoryBrand(req: Request, res: Response,next: NextFunction) {
+    static getInventoryBrand(req: Request, res: Response, next: NextFunction) {
         BrandModel.find()
             .then((resBrand) => {
                 res.status(201).json({
@@ -36,21 +40,29 @@ class InventoryBrandController {
                 });
             })
             .catch((err) => {
-                next(err)
+                next(err);
             });
     }
     //============================= END OF READ REQUEST ========================
 
-    static async editInventoryBrand(req: Request, res: Response, next: NextFunction) {
+    static async editInventoryBrand(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
         const brandID = req.params.id;
-        const name = req.body.name;
+        const { name } = req.body;
+        const editDataBrand = { name };
 
+        for (const key in editDataBrand) {
+            if (!editDataBrand[key]) {
+                delete editDataBrand[key];
+            }
+        }
         try {
             const updateName = await BrandModel.findByIdAndUpdate(
                 brandID,
-                {
-                    name: name,
-                },
+                editDataBrand,
                 { new: true }
             );
             res.status(200).json({
@@ -61,18 +73,25 @@ class InventoryBrandController {
                 data: updateName,
             });
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 
-    static async deleteInventoryBrand(req: Request, res: Response, next: NextFunction) {
+    static async deleteInventoryBrand(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
         const brandID = req.params.id;
         const foundBrand = await BrandModel.findById(brandID);
 
         try {
-           if (!brandID) {
-              throw { name: 'Params Is Empty' };
-           }
+            if (!brandID) {
+                throw { name: "Params Is Empty" };
+            }
+            if (!foundBrand) {
+                throw { name: "Data Not Found" };
+            }
             const updateStatus = await BrandModel.findByIdAndUpdate(
                 brandID,
                 { status: false, name: foundBrand?.name },
@@ -86,7 +105,7 @@ class InventoryBrandController {
                 data: updateStatus,
             });
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 }
