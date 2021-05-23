@@ -56,21 +56,11 @@ class InventoryBrandController {
         const brandID = req.params.id;
         const { name } = req.body;
         const editDataBrand = { name };
-        
-        if(!req.body.name){
-           throw { name: 'Input body Required' };
-        }
-
-        for (const key in editDataBrand) {
-            if (!editDataBrand[key]) {
-                delete editDataBrand[key];
-            }
-            if (editDataBrand[key] === '') {
-                  throw { name: 'All Input Required' };
-            }
-        }
        
         try {
+            if(!name){
+               throw { name: 'Input body Required' };
+            }
             const updateName = await BrandModel.findByIdAndUpdate(
                 brandID,
                 editDataBrand,

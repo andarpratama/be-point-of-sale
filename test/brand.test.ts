@@ -88,16 +88,16 @@ describe('PATCH /inventory/brand - Brand Update Endpoint', () => {
    });
 
    it('Should can handle the error, if doesnt input body', async () => {
-        const updateInv = await updateInvalid({data: 'as'}, brandResultId);
-        console.log(updateInv.body)
-      //   expect(updatedBrand.status).toEqual(201);
-      //   expect(updatedBrand.body).toEqual({
-      //       success: true,
-      //       statusCode: 201,
-      //       responseStatus: 'Status OK',
-      //       message: `Success edit brand name to ${updatedBrand.body.data.name}`,
-      //       data: updatedBrand.body.data
-      //   });
+        let data
+        const updateInv = await updateInvalid(data, brandResultId);
+        expect(updateInv.status).toEqual(422);
+        expect(updateInv.body).toEqual({
+            success: false,
+            message: 'Input body Required: Please input data in body',
+            error: { name: 'Input body Required' },
+            status: 'Unprocessable Entity',
+            statusCode: 422
+        });
    });
     
     
