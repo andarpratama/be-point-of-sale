@@ -46,21 +46,70 @@ class InventoryProductController {
             });
     }
 
-    static editInventoryProduct(req: Request, res: Response) {
-        res.status(200).json({
-            success: true,
-            statusCode: 200,
-            responseStatus: "Status OK",
-            message: "Edit Inventory Product",
-        });
+    static async editInventoryProduct(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            const productID = req.params.id;
+            const editDataProduct: any = {
+                code: req.body.code,
+                name: req.body.name,
+                image: req.body.image,
+            };
+
+            for (const key in editDataProduct) {
+                if (!editDataProduct[key]) {
+                    delete editDataProduct[key];
+                }
+            }
+            const updateDataProduct = await ProductModel.findByIdAndUpdate(
+                productID,
+                editDataProduct,
+                { new: true }
+            );
+            res.status(200).json({
+                success: true,
+                statusCode: 200,
+                responseStatus: "Status OK",
+                message: `Success edit Product`,
+                data: updateDataProduct,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
-    static deleteInventoryProduct(req: Request, res: Response) {
-        res.status(200).json({
-            success: true,
-            statusCode: 200,
-            responseStatus: "Status OK",
-            message: "Delete Inventory Product",
-        });
+    static async deleteInventoryProduct(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        const productID = req.params.id;
+        const foundProduct = await ProductModel.findById(productID);
+
+        try {
+            if (!productID) {
+                throw { name: "Params Is Empty" };
+            }
+            if (!foundProduct) {
+                throw { name: "Data Not Found" };
+            }
+            const updateStatus = await ProductModel.findByIdAndUpdate(
+                productID,
+                { status: false },
+                { new: true }
+            );
+            res.status(200).json({
+                success: true,
+                statusCode: 200,
+                responseStatus: "Status OK",
+                message: "Delete Inventory Product",
+                data: updateStatus,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
     static async getDetailInventoryProduct(
         req: Request,

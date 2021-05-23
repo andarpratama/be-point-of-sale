@@ -50,7 +50,6 @@ class InventoryUnitController {
     ) {
         try {
             const unitID = req.params.id;
-            // const { name, alias, price, quantity } = req.body;
             const editDataUnit: any = {
                 name: req.body.name,
                 alias: req.body.alias,

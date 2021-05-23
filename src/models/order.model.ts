@@ -28,8 +28,8 @@ const orderSchema = new Schema(
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
 
-const InvoiceModel = mongoose.model<OrderDocument, OrderModelInterface>(
+const OrderModel = mongoose.model<OrderDocument, OrderModelInterface>(
     "Invoice",
     orderSchema
 );
-export { InvoiceModel };
+export { OrderModel };
