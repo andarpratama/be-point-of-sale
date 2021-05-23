@@ -14,7 +14,10 @@ class InventoryUnitController {
                 throw { name: "Input body Required" };
             }
             const newUnit = await UnitModel.create({
-                allbody,
+                name: name,
+                alias: alias,
+                price: price,
+                quantity: quantity,
             });
             res.status(201).json({
                 success: true,
@@ -45,17 +48,21 @@ class InventoryUnitController {
         res: Response,
         next: NextFunction
     ) {
-        const unitID = req.params.id;
-        const { name, alias, price, quantity } = req.body;
-        const editDataUnit = { name, alias, price, quantity };
-
-        for (const key in editDataUnit) {
-            if (!editDataUnit[key]) {
-                delete editDataUnit[key];
-            }
-        }
-
         try {
+            const unitID = req.params.id;
+            // const { name, alias, price, quantity } = req.body;
+            const editDataUnit: any = {
+                name: req.body.name,
+                alias: req.body.alias,
+                price: req.body.price,
+                quantity: req.body.quantity,
+            };
+
+            for (const key in editDataUnit) {
+                if (!editDataUnit[key]) {
+                    delete editDataUnit[key];
+                }
+            }
             const updateDataUnit = await UnitModel.findByIdAndUpdate(
                 unitID,
                 editDataUnit,

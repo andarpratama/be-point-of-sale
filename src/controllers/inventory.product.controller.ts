@@ -14,7 +14,9 @@ class InventoryProductController {
                 throw { name: "Input body Required" };
             }
             const newProduct = await ProductModel.create({
-                allbody,
+                code: code,
+                name: name,
+                image: image,
             });
             res.status(201).json({
                 success: true,
@@ -27,13 +29,21 @@ class InventoryProductController {
             next(error);
         }
     }
-    static getInventoryProduct(req: Request, res: Response) {
-        res.status(200).json({
-            success: true,
-            statusCode: 200,
-            responseStatus: "Status OK",
-            message: "Get Inventory Product Data",
-        });
+    static getInventoryProduct(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        ProductModel.find()
+            .then((resProduct) => {
+                res.status(201).json({
+                    message: "Success Find All Product",
+                    data: resProduct,
+                });
+            })
+            .catch((err) => {
+                next(err);
+            });
     }
 
     static editInventoryProduct(req: Request, res: Response) {
