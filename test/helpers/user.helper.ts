@@ -12,7 +12,14 @@ const infoUser = async (userId: string, bearerToken: string) => {
 // COMMENT: InValid endpoint
 const infoUserMissingToken = async (userId: string) => {
     const userInfo = await request(APP)
-        .get(`/api/v1/user/detail/${userId}`)
+        .get(`/api/v1/user/${userId}/detail`)
+    return userInfo;
+};
+
+// COMMENT: Update user
+const updateUser = async (userId: string) => {
+    const userInfo = await request(APP)
+        .patch(`/api/v1/user/${userId}`)
     return userInfo;
 };
 

@@ -29,7 +29,7 @@ class AuthRoute {
    }
 
    public resetPassword(): void {
-      this.router.get('/reset-password/:token', authController.resetPassword)
+      this.router.get('/reset-password/:token/:id', authController.resetPassword)
    }
 
 }
