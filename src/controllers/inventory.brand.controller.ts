@@ -34,7 +34,10 @@ class InventoryBrandController {
     static getInventoryBrand(req: Request, res: Response, next: NextFunction) {
         BrandModel.find()
             .then((resBrand) => {
-                res.status(201).json({
+                res.status(200).json({
+                    success: true,
+                    statusCode: 200,
+                    responseStatus: "Status OK",
                     message: "Success Find All Brand",
                     data: resBrand,
                 });
@@ -53,21 +56,29 @@ class InventoryBrandController {
         const brandID = req.params.id;
         const { name } = req.body;
         const editDataBrand = { name };
+        
+        if(!req.body.name){
+           throw { name: 'Input body Required' };
+        }
 
         for (const key in editDataBrand) {
             if (!editDataBrand[key]) {
                 delete editDataBrand[key];
             }
+            if (editDataBrand[key] === '') {
+                  throw { name: 'All Input Required' };
+            }
         }
+       
         try {
             const updateName = await BrandModel.findByIdAndUpdate(
                 brandID,
                 editDataBrand,
                 { new: true }
             );
-            res.status(200).json({
+            res.status(201).json({
                 success: true,
-                statusCode: 200,
+                statusCode: 201,
                 responseStatus: "Status OK",
                 message: `Success edit brand name to ${updateName?.name}`,
                 data: updateName,

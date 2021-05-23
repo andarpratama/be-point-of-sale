@@ -143,10 +143,11 @@ class ErrorHandler {
                 break;
 
             case "Input body Required":
-                statusCode = 404;
+                statusCode = 422;
                 message = "Input body Required: Please input data in body";
-                status = "Not Found";
-                break;
+                status = "Unprocessable Entity";
+              break;
+           
             case "Data Not Found":
                 statusCode = 404;
                 message = "Data Not Found";
