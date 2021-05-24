@@ -1,6 +1,5 @@
-import { sum } from "./helpers/test.helper";
 import { BrandModel } from "../src/models/brand.model";
-import { create, updateInvalid, createInvalid, update, getall } from './helpers/brand.helper';
+import { create, updateInvalid, deleteBrand, getOne, createInvalid, update, getall } from './helpers/brand.helper';
 
 
 describe('POST /inventory/brand - Brand Create Endpoint', () => {
@@ -63,6 +62,33 @@ describe('GET /inventory/brand - Brand Getall Endpoint', () => {
     
 });
 
+
+describe('GET /inventory/brand/:id - Brand Get One Endpoint', () => {
+   let idBrand:string
+   beforeEach(async () => {
+        const newBrand = await create({name: 'BrandTest1'});
+        expect(newBrand.status).toEqual(201);
+        idBrand = newBrand.body.data._id
+   });
+   
+   afterEach(async () => {
+        await BrandModel.deleteMany();
+   });
+
+   it('Should be able to register', async () => {
+        const foundOneBrand = await getOne(idBrand);
+        expect(foundOneBrand.status).toEqual(200);
+        expect(foundOneBrand.body).toEqual({
+            success: true,
+            statusCode: 200,
+            responseStatus: 'Status OK',
+            message: 'Success Find One Brand',
+            data: foundOneBrand.body.data
+        });
+   });
+    
+});
+
 describe('PATCH /inventory/brand - Brand Update Endpoint', () => {
    let brandResultId:any
    beforeEach(async () => {
@@ -88,8 +114,7 @@ describe('PATCH /inventory/brand - Brand Update Endpoint', () => {
    });
 
    it('Should can handle the error, if doesnt input body', async () => {
-        let data
-        const updateInv = await updateInvalid(data, brandResultId);
+        const updateInv = await updateInvalid(brandResultId);
         expect(updateInv.status).toEqual(422);
         expect(updateInv.body).toEqual({
             success: false,
@@ -99,15 +124,31 @@ describe('PATCH /inventory/brand - Brand Update Endpoint', () => {
             statusCode: 422
         });
    });
-    
-    
 });
 
 
-// TODO: Testing can get one
+describe('DELETE /inventory/brand/:id - Brand Delete Endpoint', () => {
+   let idBrand:string
+   beforeEach(async () => {
+        const newBrand = await create({name: 'BrandTest1'});
+        expect(newBrand.status).toEqual(201);
+        idBrand = newBrand.body.data._id
+   });
+   
+   afterEach(async () => {
+        await BrandModel.deleteMany();
+   });
 
-// TODO: Testing update input required
-
-// TODO: Testing update input valid input 
-
-// TODO: Testing can delete
+   it('Should be able to delete brand', async () => {
+        const foundOneBrand = await deleteBrand(idBrand);
+        expect(foundOneBrand.status).toEqual(200);
+        expect(foundOneBrand.body).toEqual({
+            success: true,
+            statusCode: 200,
+            responseStatus: 'Status OK',
+            message: 'Delete Inventory Brand',
+            data: foundOneBrand.body.data
+        });
+   });
+    
+});

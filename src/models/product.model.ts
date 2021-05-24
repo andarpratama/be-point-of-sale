@@ -20,13 +20,17 @@ const productSchema = new Schema(
             type: String,
             required: true,
         },
-        unitID: {
+        unitID: [{
             type: mongoose.Types.ObjectId,
             ref: "Unit",
-        },
+        }],
         status: {
             type: Boolean,
             default: true,
+        },
+        brandID: {
+            type: mongoose.Types.ObjectId,
+            ref: "Brand",
         },
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }

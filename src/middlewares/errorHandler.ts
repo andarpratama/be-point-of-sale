@@ -148,6 +148,12 @@ class ErrorHandler {
                 status = "Unprocessable Entity";
               break;
            
+            case "No Data Has Been Created":
+                statusCode = 200;
+                message = "No Data Has Been Created: Please Create some data berfore";
+                status = "OK";
+                break;
+           
             case "Data Not Found":
                 statusCode = 404;
                 message = "Data Not Found";

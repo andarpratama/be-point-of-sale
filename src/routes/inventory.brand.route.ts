@@ -9,8 +9,12 @@ class InventoryBrandRoutes {
         this.postInventoryBrand();
         this.editInventoryBrand();
         this.deleteInventoryBrand();
+        this.getOneInventoryBrand()
     }
-
+   
+    public getOneInventoryBrand():void {
+       this.router.get('/brand/:id', InventoryBrandController.getOneInventoryBrand)
+    }
     public getInventoryBrand(): void {
         this.router.get("/brand", InventoryBrandController.getInventoryBrand);
     }

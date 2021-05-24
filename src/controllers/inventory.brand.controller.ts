@@ -2,6 +2,21 @@ import { NextFunction, Request, Response } from "express";
 import { BrandModel } from "../models/brand.model";
 
 class InventoryBrandController {
+   static async getOneInventoryBrand(req: Request, res: Response, next: NextFunction) {
+      const idBrand = req.params.id
+      try {
+         const foundOneBrand = await BrandModel.findById(idBrand)
+         res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: "Success Find One Brand",
+            data: foundOneBrand,
+         });
+      } catch (error) {
+         
+      }
+   }
     //============================= CREATE REQUEST =============================
     static async postInventoryBrand(
         req: Request,

@@ -30,7 +30,7 @@ const poSchema = new Schema(
         },
         requestUser: {
             type: mongoose.Types.ObjectId,
-            ref: "LoggedInUser",
+            ref: "User",
         },
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }

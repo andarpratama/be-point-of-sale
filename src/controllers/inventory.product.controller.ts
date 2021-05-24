@@ -7,8 +7,8 @@ class InventoryProductController {
         res: Response,
         next: NextFunction
     ) {
-        const { code, name, image } = req.body;
-        const allbody = { code, name, image };
+        const { code, name, image, brandID } = req.body;
+        const allbody = { code, name, image, brandID };
         try {
             if (!allbody) {
                 throw { name: "Input body Required" };
@@ -17,6 +17,7 @@ class InventoryProductController {
                 code: code,
                 name: name,
                 image: image,
+                brandID: brandID
             });
             res.status(201).json({
                 success: true,

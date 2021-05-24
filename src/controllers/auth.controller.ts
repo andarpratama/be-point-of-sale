@@ -18,21 +18,16 @@ class Auth {
 
    static async forgotPassword(req: Request, res: Response, next: NextFunction) {
       const { email } = req.body
-      console.log(email)
    
       try {
          const foundUser = await UserModel.findOne({ email })
          if (!foundUser) {
             throw { name: 'Email not Registered' };
          }
-         console.log(1)
          const idUser = foundUser?._id
-         console.log(idUser)
          const tokenForgotPassword = jwt.sign({id: idUser}, "Assignment4", {
             expiresIn: "5m",
          });
-
-         console.log(tokenForgotPassword)
 
          const apiResetPassword = 'http://localhost:3030/api/v1/auth/reset-password/';
 
@@ -80,8 +75,6 @@ class Auth {
             html: emailMessage
          }
 
-         console.log(3)
-
          transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                res.json({
@@ -99,8 +92,6 @@ class Auth {
                });
             }
          })
-
-         console.log(4)
    
       } catch (error) {
          next(error)

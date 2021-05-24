@@ -22,10 +22,10 @@ const update = async (data: { name: string }, id:string) => {
     return newBrand;
 };
 
-const updateInvalid = async (data: {data:string, }, id:string) => {
+const updateInvalid = async (id:string) => {
     const newBrand = await request(APP)
         .patch(`/api/v1/inventory/brand/${id}`)
-        .send(data);
+        .send();
     return newBrand;
 };
 
@@ -35,9 +35,16 @@ const getall = async () => {
     return foundBrand;
 };
 
-const signup = async (user: { name?: string; email?: string; password?: string }) => {
-    const userLogged = await request(APP).post('/api/v1/auth/signup').send(user);
-    return userLogged;
+const getOne = async (id:string) => {
+    const foundBrand = await request(APP)
+        .get(`/api/v1/inventory/brand/${id}`)
+    return foundBrand;
 };
 
-export { create, update, updateInvalid, createInvalid, getall, signup };
+const deleteBrand = async (id:string) => {
+    const foundBrand = await request(APP)
+        .delete(`/api/v1/inventory/brand/${id}`)
+    return foundBrand;
+};
+
+export { create, update, deleteBrand, getOne, updateInvalid, createInvalid, getall };

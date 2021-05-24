@@ -24,6 +24,11 @@ class InventoryProductRoutes {
             InventoryProductController.postInventoryProduct
         );
     }
+   
+   
+   public pushUnitToProduct(): void {
+      
+   }
     public editInventoryProduct(): void {
         this.router.patch(
             "/product/:id",
