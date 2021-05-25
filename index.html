@@ -1,5 +1,23 @@
-<select name="" id="">
-   <option value="ifsdjfskfj20032d">kg</option> // beras
-   <option value="fdsfsfkskfsdkfk3">kg</option> // gula
-   <option value="fsdfsfkjaj20020">kw</option>
-</select>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+<body>
+   
+   <script>
+      function next_id(input) {
+         var output = parseInt(input, 10) + 1; // parse and increment
+         output += ""; // convert to string
+         while (output.length < 2) output = "00" + output; // prepend leading zeros
+         return output;
+      }
+
+      let id = next_id('99')
+      console.log(id)
+   </script>
+</body>
+</html>

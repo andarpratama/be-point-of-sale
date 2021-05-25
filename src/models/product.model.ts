@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IProduct } from "../interfaces/IProduct";
 import { ProductDocument } from "../interfaces/IProduct.mongoose";
+import { brandSchema } from "./brand.model";
 
 interface ProductModelInterface extends mongoose.Model<ProductDocument> {
     build(attr: IProduct): ProductDocument;
@@ -28,10 +29,7 @@ const productSchema = new Schema(
             type: Boolean,
             default: true,
         },
-        brandID: {
-            type: mongoose.Types.ObjectId,
-            ref: "Brand",
-        },
+        brandID: brandSchema
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );

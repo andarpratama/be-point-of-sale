@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ProductModel } from "../models/product.model";
+import { BrandModel } from "../models/brand.model";
 
 class InventoryProductController {
     static async postInventoryProduct(
@@ -7,17 +8,43 @@ class InventoryProductController {
         res: Response,
         next: NextFunction
     ) {
-        const { code, name, image, brandID } = req.body;
-        const allbody = { code, name, image, brandID };
-        try {
+        const { name, image, brandID } = req.body;
+        const allbody = { name, image, brandID };
+        let codeProduct: any
+
+        let codeBrand:any = await BrandModel.findById(brandID)
+        let foundBrand:any = await BrandModel.findById(brandID)
+        codeBrand = codeBrand.code
+
+        
+        function next_id(input:string) {
+            var output:any = parseInt(input, 10) + 1; // parse and increment
+            output += ""; // convert to string
+            while (output.length < 2) output = "00" + output; // prepend leading zeros
+            return output;
+         }
+         let allProduct:any = await ProductModel.find()
+         let lastProduct = allProduct.pop()
+         if (lastProduct) {
+            // console.log('ada')
+            codeProduct = next_id(lastProduct.code.slice(5))
+         }
+         else {
+            codeProduct = '001'
+            // console.log('empty')
+         }
+         
+         // console.log(codeProduct)
+       
+         try {
             if (!allbody) {
                 throw { name: "Input body Required" };
             }
             const newProduct = await ProductModel.create({
-                code: code,
+                code: 'PRD' + codeBrand + codeProduct,
                 name: name,
                 image: image,
-                brandID: brandID
+                brandID: foundBrand
             });
             res.status(201).json({
                 success: true,

@@ -12,6 +12,9 @@ const brandSchema = new Schema(
             type: String,
             required: true,
         },
+        code: {
+            type: String
+        },
         status: {
             type: Boolean,
             default: true,
@@ -24,4 +27,4 @@ const BrandModel = mongoose.model<BrandDocument, BrandModelInterface>(
     "Brand",
     brandSchema
 );
-export { BrandModel };
+export { BrandModel, brandSchema };

@@ -26,10 +26,10 @@ class Auth {
          }
          const idUser = foundUser?._id
          const tokenForgotPassword = jwt.sign({id: idUser}, "Assignment4", {
-            expiresIn: "5m",
+            expiresIn: "10m",
          });
 
-         const apiResetPassword = 'http://localhost:3030/api/v1/auth/reset-password/';
+         const apiResetPassword = 'http://localhost:4200/auth/reset-password';
 
          let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -41,7 +41,7 @@ class Auth {
 
 
          const buttonName = 'Reset Password'
-         const buttonHref = `${apiResetPassword}${tokenForgotPassword}/${idUser}`
+         const buttonHref = `${apiResetPassword}/${tokenForgotPassword}/${idUser}`
          const buttonReset = `<a href="${buttonHref}" style="padding: 13px 18px; border: none;border-radius: 5px; background-color: dodgerblue; color: white; font-size: 16px;text-decoration: none;font-family: sans-serif;" >${buttonName}</a>`
 
          const emailMessage = `
@@ -69,7 +69,7 @@ class Auth {
 
          let mailOptions = {
             from: 'andar.salt@gmail.com',
-            to: 'master.amarta@gmail.com',
+            to: foundUser.email,
             subject: 'Reset Password from ACONG STORE',
             text: 'Link Reset Password',
             html: emailMessage
@@ -100,9 +100,9 @@ class Auth {
    }
 
    static async resetPassword(req: Request, res: Response, next: NextFunction) {
-      const tokenResetPassword = req.params.token
-      const userId = req.params.id
-      console.log(userId)
+      const tokenResetPassword = req.body.token
+      const userId = req.body.user
+      const password = req.body.password
       try {
          if (!tokenResetPassword) {
             throw { name: 'Missing Token Reset Password' };
@@ -113,10 +113,14 @@ class Auth {
             throw { name: 'ID not Registered' };
          }
          
-         jwt.verify(tokenResetPassword, "Assignment4", function (error, decodedData) {
+         jwt.verify(tokenResetPassword, "Assignment4", function (error:any, decodedData:any) {
             if (error) {
                throw { name: 'Access Token Expired' };
             }
+         })
+
+         const updatedPassword = await UserModel.findByIdAndUpdate(userId, {
+             password: await bcrypt.hash(password, 8)
          })
          
          res.status(200).json({
@@ -124,6 +128,8 @@ class Auth {
             statusCode: 200,
             responseStatus: "Status OK",
             message: "Berhasil reset password", 
+            oldPassword: foundUser?.password,
+            newPassword: updatedPassword?.password
          })
       } catch (error) {
          next(error)
