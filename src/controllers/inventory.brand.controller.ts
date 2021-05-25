@@ -28,14 +28,14 @@ class InventoryBrandController {
         function next_id(input:string) {
             var output:any = parseInt(input, 10) + 1; // parse and increment
             output += ""; // convert to string
-            while (output.length < 2) output = "0" + output; // prepend leading zeros
+            while (output.length < 2) output = "00" + output; // prepend leading zeros
             return output;
-         }
+        }
 
         let allBrand = await BrandModel.find()
         let result:any = allBrand.pop()
         if (!result) {
-           code = '01'
+           code = '001'
         } else {
            code = next_id(result.code)
         }
