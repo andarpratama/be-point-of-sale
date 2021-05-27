@@ -3,11 +3,7 @@ import { ProductModel } from "../models/product.model";
 import { BrandModel } from "../models/brand.model";
 
 class InventoryProductController {
-    static async postInventoryProduct(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    static async postInventoryProduct( req: Request, res: Response,next: NextFunction) {
         const { name, image, brandID } = req.body;
         const allbody = { name, image, brandID };
         let codeProduct: any
@@ -26,15 +22,11 @@ class InventoryProductController {
          let allProduct:any = await ProductModel.find()
          let lastProduct = allProduct.pop()
          if (lastProduct) {
-            // console.log('ada')
-            codeProduct = next_id(lastProduct.code.slice(5))
+            codeProduct = next_id(lastProduct.code.slice(6))
          }
          else {
             codeProduct = '001'
-            // console.log('empty')
          }
-         
-         // console.log(codeProduct)
        
          try {
             if (!allbody) {
@@ -57,11 +49,7 @@ class InventoryProductController {
             next(error);
         }
     }
-    static getInventoryProduct(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    static getInventoryProduct(req: Request, res: Response, next: NextFunction) {
         ProductModel.find()
             .then((resProduct) => {
                 res.status(201).json({
@@ -74,11 +62,7 @@ class InventoryProductController {
             });
     }
 
-    static async editInventoryProduct(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    static async editInventoryProduct(req: Request, res: Response, next: NextFunction) {
         try {
             const productID = req.params.id;
             const editDataProduct: any = {
@@ -108,11 +92,7 @@ class InventoryProductController {
             next(error);
         }
     }
-    static async deleteInventoryProduct(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    static async deleteInventoryProduct(req: Request, res: Response, next: NextFunction) {
         const productID = req.params.id;
         const foundProduct = await ProductModel.findById(productID);
 

@@ -38,7 +38,7 @@ class InventorySupplierRoutes {
     }
     public getDetailInventorySupplier(): void {
         this.router.get(
-            "/supplier/:id/detail",
+            "/supplier/:id",
             InventorySupplierController.getDetailInventorySupplier
         );
     }

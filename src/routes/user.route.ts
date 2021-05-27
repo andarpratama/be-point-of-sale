@@ -8,6 +8,7 @@ class UserRoutes {
     constructor() {
         this.router = Router();
         this.getAllUser();
+        this.create()
         this.authJwt();
         this.editUser();
         this.deleteUser();
@@ -17,6 +18,10 @@ class UserRoutes {
    
     public authJwt():void {
        this.router.use(authJwt.authentication)
+    }
+   
+   public create(): void {
+       this.router.post('/', UserController.create)
     }
 
     public getAllUser(): void {

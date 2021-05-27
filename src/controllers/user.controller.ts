@@ -14,6 +14,40 @@ class UserController {
             data: allUser
         });
     }
+   
+   static async create(req: Request, res: Response, next: NextFunction) {
+      try {
+            if (!req.body.name) {
+               throw { name: 'Name Required' };
+            }
+            if (!req.body.email) {
+               throw { name: 'Email Required' };
+            }
+            if (!validator.isEmail(req.body.email)) {
+               throw { name: 'Invalid Email' };
+            }
+            if (!req.body.password) {
+                throw { name: 'Password Required' };
+            }
+            const newUser = new UserModel({
+                name: req.body.name,
+                email: req.body.email,
+                password: await bcrypt.hash(req.body.password, 8)
+            });
+            await newUser.save();
+            res.status(201).json({
+                success: true,
+                message: 'Success Registration',
+                status: 'Created',
+                statusCode: 201,
+                data: newUser
+            });
+            // logging.info('SIGNUP', 'MESSAGE: Success Sigup')
+        } catch (err) {
+            next(err);
+        }
+   }
+   
     static async editUser(req: Request, res: Response, next: NextFunction) {
          const userId = req.params?.id
          const {name, email, handphone, image} = req.body

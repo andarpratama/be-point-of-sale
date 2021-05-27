@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ProductModel } from "../models/product.model";
 import { UnitModel } from "../models/unit.model";
 
 class InventoryUnitController {
@@ -7,18 +8,23 @@ class InventoryUnitController {
         res: Response,
         next: NextFunction
     ) {
-        const { name, alias, price, quantity } = req.body;
-        const allbody = { name, alias, price, quantity };
+        const { name, alias, sellPrice, buyPrice, stock, productID } = req.body;
+        const allbody = { name, alias, sellPrice, buyPrice,  productID };
         try {
             if (!allbody) {
                 throw { name: "Input body Required" };
             }
+           
+            const foundProduct = await ProductModel.findById(productID)
+            
             const newUnit = await UnitModel.create({
-                name: name,
-                alias: alias,
-                price: price,
-                quantity: quantity,
+               name: name,
+               alias: alias,
+               sellPrice: sellPrice,
+               buyPrice: buyPrice,
+               productID: foundProduct
             });
+           
             res.status(201).json({
                 success: true,
                 statusCode: 201,
@@ -42,19 +48,39 @@ class InventoryUnitController {
                 next(err);
             });
     }
+   
+   static async getOneUnit(req: Request, res: Response, next: NextFunction) {
+      try {
+          const foundUnit = await UnitModel.findById(req.params.id)
+          return res.status(200).json({
+                success: true,
+                statusCode: 200,
+                responseStatus: "Status OK",
+                message: "Get unit with this id",
+                data: foundUnit,
+            });
+       } catch (error) {
+          next(error)
+       }
+    }
 
-    static async editInventoryUnit(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    static async editInventoryUnit(req: Request, res: Response, next: NextFunction) {
+        const { name, alias, sellPrice, buyPrice, stock, productID } = req.body;
+        const allbody = { name, alias, sellPrice, buyPrice,  productID };
+        const unitID = req.params.id;
         try {
-            const unitID = req.params.id;
+            if (!allbody) {
+                throw { name: "Input body Required" };
+            }
+           
+            const foundProduct = await ProductModel.findById(productID)
+           
             const editDataUnit: any = {
-                name: req.body.name,
-                alias: req.body.alias,
-                price: req.body.price,
-                quantity: req.body.quantity,
+               name: name,
+               alias: alias,
+               sellPrice: sellPrice,
+               buyPrice: buyPrice,
+               productID: foundProduct
             };
 
             for (const key in editDataUnit) {

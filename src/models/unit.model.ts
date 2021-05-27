@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IUnit } from "../interfaces/IUnit";
 import { UnitDocument } from "../interfaces/IUnit.mongoose";
+import { productSchema } from "./product.model";
 
 interface UnitModelInterface extends mongoose.Model<UnitDocument> {
     build(attr: IUnit): UnitDocument;
@@ -16,18 +17,23 @@ const unitSchema = new Schema(
             type: String,
             required: true,
         },
-        price: {
+        sellPrice: {
             type: Number,
-            required: true,
+            default: 0
         },
-        quantity: {
+        buyPrice: {
             type: Number,
-            required: true,
+            default: 0
+        },
+        stock: {
+            type: Number,
+            default: 0
         },
         status: {
             type: Boolean,
             default: true,
         },
+        productID: productSchema
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );

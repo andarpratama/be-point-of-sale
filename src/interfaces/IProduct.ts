@@ -1,10 +1,11 @@
 import { Document } from "mongoose";
+import { IUnit } from "./IUnit";
 
 interface IProduct extends Document {
     code: string;
     name: string;
     image: string;
-    unitID: string;
+    unitID: IUnit;
     status: boolean;
 }
 

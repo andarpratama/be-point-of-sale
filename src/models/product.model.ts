@@ -38,4 +38,4 @@ const ProductModel = mongoose.model<ProductDocument, ProductModelInterface>(
     "Product",
     productSchema
 );
-export { ProductModel };
+export { ProductModel, productSchema };

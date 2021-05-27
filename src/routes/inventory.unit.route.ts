@@ -6,6 +6,7 @@ class InventoryUnitRoutes {
     constructor() {
         this.router = Router();
         this.getInventoryUnit();
+        this.getOneUnit();
         this.postInventoryUnit();
         this.editInventoryUnit();
         this.deleteInventoryUnit();
@@ -13,6 +14,9 @@ class InventoryUnitRoutes {
 
     public getInventoryUnit(): void {
         this.router.get("/unit", InventoryUnitController.getInventoryUnit);
+    }
+    public getOneUnit():void {
+       this.router.get("/unit/:id", InventoryUnitController.getOneUnit)
     }
     public postInventoryUnit(): void {
         this.router.post("/unit", InventoryUnitController.postInventoryUnit);
