@@ -9,7 +9,7 @@ class UserRoutes {
         this.router = Router();
         this.getAllUser();
         this.create()
-        this.authJwt();
+      //   this.authJwt();
         this.editUser();
         this.deleteUser();
         this.getDetailUser()

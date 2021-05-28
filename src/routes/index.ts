@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import ErrorHandler from "../middlewares/errorHandler";
 
 import authRoute from "./auth.route";
@@ -7,11 +7,12 @@ import inventoryBrandRoute from "../routes/inventory.brand.route";
 import inventoryUnitRoute from "../routes/inventory.unit.route";
 import inventoryProductRoute from "../routes/inventory.product.route";
 import inventorySupplierRoute from "./inventory.supplier.route";
-import financePoRoute from "./finance.po.route";
+// import financePoRoute from "./finance.po.route";
 import orderRoute from "./order.route";
 import homeRoute from "./home.route";
 import financeInvoiceRoute from "./finance.invoice.route"
 import companyRoute from "./company.route";
+import purchaseOrderRoute from "./purchase.order.route";
 
 
 class Routes {
@@ -25,7 +26,8 @@ class Routes {
         this.inventoryUnit();
         this.inventoryProduct();
         this.inventorySupplier();
-        this.financePo();
+        this.purchaseOrder()
+      //   this.financePo();
         this.order();
         this.errorHandler();
         this.finanaceInvoice()
@@ -63,11 +65,15 @@ class Routes {
         this.router.use("/api/v1/inventory", inventorySupplierRoute);
     }
     //====================END OF INVENTORY ENDPOINT=========
+   
+    public purchaseOrder():void {
+       this.router.use("/api/v1/purchase-order", purchaseOrderRoute)
+    }
 
     //====================FINANCE ENDPOINT==================
-    public financePo(): void {
-        this.router.use("/api/v1/finance", financePoRoute);
-    }
+   //  public financePo(): void {
+   //      this.router.use("/api/v1/finance", financePoRoute);
+   //  }
     public finanaceInvoice():void {
        this.router.use("/api/v1/finance", financeInvoiceRoute)
     }

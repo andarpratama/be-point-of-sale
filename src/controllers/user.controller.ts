@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import validator from "validator";
 import { UserModel } from "../models/user.model";
 import bcrypt from 'bcryptjs'
@@ -32,7 +32,9 @@ class UserController {
             const newUser = new UserModel({
                 name: req.body.name,
                 email: req.body.email,
-                password: await bcrypt.hash(req.body.password, 8)
+                password: await bcrypt.hash(req.body.password, 8),
+                handphone: req.body.handphone,
+                role: req.body.role
             });
             await newUser.save();
             res.status(201).json({
@@ -49,50 +51,60 @@ class UserController {
    }
    
     static async editUser(req: Request, res: Response, next: NextFunction) {
-         const userId = req.params?.id
-         const {name, email, handphone, image} = req.body
-         let password = req.body.password
-         password = await bcrypt.hash(req.body.password, 8)
-         const updateData:any = {name, email, password, handphone, image}
+         const userID = req.params.id;
+         const updateData: any = {
+            name: req.body.name,
+            email: req.body.email,
+            handphone: req.body.handphone,
+            role: req.body.role,
+            status: true
+         };
 
-       try {
-            for (const item in updateData) {
-               if (!updateData[item]) {
-                  delete updateData[item]
-               }
-               if (updateData[item] === '') {
-                  throw { name: 'All Input Required' };
-               }
+         for (const key in updateData) {
+            if (!updateData[key]) {
+               delete updateData[key];
             }
-            
-            const updatedUser = await UserModel.findByIdAndUpdate(userId, updateData, {new: true})
-            if (updatedUser) {
-               res.status(200).json({
-                  success: true,
-                  statusCode: 200,
-                  responseStatus: "Status OK",
-                  message: "Edit User",
-                  data: updatedUser
-               });
-            }
-            
+         }
+       
+         const updatedUser = await UserModel.findByIdAndUpdate(
+                userID,
+                updateData,
+                { new: true }
+         );
+       
+         try {
+            res.status(200).json({
+               success: true,
+               statusCode: 200,
+               responseStatus: "Status OK",
+               message: "Success update user",
+               userID: userID,
+               updatedUser: updatedUser
+            });
          } catch (error) {
             next(error)
          }
          
     }
-    static deleteUser(req: Request, res: Response) {
-        res.status(200).json({
-            success: true,
-            statusCode: 200,
-            responseStatus: "Status OK",
-            message: "Delete User",
-        });
+    static async deleteUser(req: Request, res: Response, next: NextFunction) {
+        const userID = req.params.id
+        try {
+           const deletedUser = await UserModel.findByIdAndUpdate(userID, {status: false}, {new:true})
+           res.status(200).json({
+               success: true,
+               statusCode: 200,
+               responseStatus: "Status OK",
+               message: "Success delete user",
+           });
+        } catch (error) {
+            next(error)
+        }
     }
+   
     static async getDetailUser(req: Request, res: Response) {
        try {
           const detailUser = await UserModel.findById(req.params.id)
-          return res.status(200).json({
+          res.status(200).json({
                success: true,
                statusCode: 200,
                responseStatus: "Status OK",

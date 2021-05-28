@@ -10,14 +10,31 @@
    
    <script>
       function next_id(input) {
-         var output = parseInt(input, 10) + 1; // parse and increment
+         var output = parseInt(input, 10); // parse and increment
          output += ""; // convert to string
-         while (output.length < 2) output = "00" + output; // prepend leading zeros
+         while (output.length < 2) output = "0" + output; // prepend leading zeros
          return output;
       }
 
-      let id = next_id('99')
-      console.log(id)
+      function next_id2(input) {
+         var output = parseInt(input, 10) + 1; // parse and increment
+         output += ""; // convert to string
+         while (output.length < 3) output = "0" + output; // prepend leading zeros
+         return output;
+      }
+
+      
+      let tanggal = new Date().getDate()
+      let bulan = new Date().getMonth()
+      let tahun = new Date().getFullYear()
+      tahun += ""
+      console.log(tahun.slice(2))
+      tanggal = next_id(tanggal)
+      bulan = next_id(bulan)
+
+      let po = 'PO' + tanggal + bulan + next_id2('001')
+
+
    </script>
 </body>
 </html>

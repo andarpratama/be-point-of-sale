@@ -1,28 +1,27 @@
 import mongoose, { Schema } from "mongoose";
-import { IPo } from "../interfaces/IPo";
-import { PoDocument } from "../interfaces/IPo.mongoose";
+import { IPurchaseOrder } from "../interfaces/IPurchaseOrder";
+import { PurchaseOrderDocument } from "../interfaces/IPurchaseOrder.mongoose";
 
-interface PoModelInterface extends mongoose.Model<PoDocument> {
-    build(attr: IPo): PoDocument;
+interface PoModelInterface extends mongoose.Model<PurchaseOrderDocument> {
+    build(attr: IPurchaseOrder): PurchaseOrderDocument;
 }
 
-const poSchema = new Schema(
+const puchaseOrderSchema = new Schema(
     {
-        code: {
+        no_po: {
             type: String,
             required: true,
         },
-        productID: {
+        items: [{
             type: mongoose.Types.ObjectId,
-            ref: "Product",
-        },
-        quantity: {
+            ref: "ItemPurchaseOrderModel",
+            unique: [true, 'This item has been added']
+        }],
+        totalProduct: {
             type: Number,
-            required: true,
         },
-        unitID: {
-            type: mongoose.Types.ObjectId,
-            ref: "Unit",
+        totalQuantity: {
+           type: Number,
         },
         supplierID: {
             type: mongoose.Types.ObjectId,
@@ -32,9 +31,17 @@ const poSchema = new Schema(
             type: mongoose.Types.ObjectId,
             ref: "User",
         },
+        prosesStatus: {
+           type: String,
+           enum: ['pending', 'paid']
+        },
+        status: {
+           type: Boolean,
+           default: true
+        }
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
 
-const PoModel = mongoose.model<PoDocument, PoModelInterface>("Po", poSchema);
-export { PoModel };
+const PurchaseOrdeModel = mongoose.model<PurchaseOrderDocument, PoModelInterface>("PurchaseOrder", puchaseOrderSchema);
+export { PurchaseOrdeModel };

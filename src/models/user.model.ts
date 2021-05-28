@@ -10,15 +10,18 @@ const userSchema = new Schema(
     {
         name: {
             type: String,
-            required: true,
+            required: [true, 'Email is required'],
         },
         email: {
             type: String,
-            unique: true,
+            required: [true, 'Email is required'],
+            unique: [true, 'This email has been registered'],
+            trim: true,
+            lowercase: true
         },
         password: {
             type: String,
-            required: true,
+            required: [true, 'Password is required'],
         },
         handphone: {
            type: String
@@ -26,12 +29,13 @@ const userSchema = new Schema(
         image: {
             type: String,
         },
-        roleId: {
-            type: mongoose.Types.ObjectId,
-            ref: "Role",
+        role: {
+           type: String,
+           enum: ['owner', 'inventory', 'finance', 'cashier']
         },
         status: {
             type: Boolean,
+            default: true
         },
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
