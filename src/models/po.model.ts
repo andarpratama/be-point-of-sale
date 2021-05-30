@@ -10,18 +10,18 @@ const puchaseOrderSchema = new Schema(
     {
         no_po: {
             type: String,
-            required: true,
         },
         items: [{
             type: mongoose.Types.ObjectId,
             ref: "ItemPurchaseOrderModel",
-            unique: [true, 'This item has been added']
         }],
         totalProduct: {
             type: Number,
+            default: 0
         },
         totalQuantity: {
            type: Number,
+           default: 0
         },
         supplierID: {
             type: mongoose.Types.ObjectId,
@@ -33,7 +33,8 @@ const puchaseOrderSchema = new Schema(
         },
         prosesStatus: {
            type: String,
-           enum: ['pending', 'paid']
+           enum: ['pending', 'paid'],
+           default: 'pending'
         },
         status: {
            type: Boolean,

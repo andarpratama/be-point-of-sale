@@ -28,5 +28,5 @@ const ItemPurchaseSchema = new Schema(
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
 
-const ItemPurchaseOrderModel = mongoose.model<IItemPODocument, PoModelInterface>("ItemPurchaseOrderModel", ItemPurchaseSchema);
+const ItemPurchaseOrderModel = mongoose.model<IItemPODocument, PoModelInterface>("ItemPurchaseOrder", ItemPurchaseSchema);
 export { ItemPurchaseOrderModel };

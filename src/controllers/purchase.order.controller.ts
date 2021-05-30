@@ -105,7 +105,6 @@ class PurchaseOrderController {
       } else {
          const no_purchaseOrder = purchaseOrder.pop().no_po
          no_po = 'PO' + tahun.slice(2) + next_id(tanggal) + next_id(bulan) + next_id2(no_purchaseOrder.slice(8))
-         console.log(no_po)
       }
       
       
@@ -122,9 +121,12 @@ class PurchaseOrderController {
             responseStatus: "Status OK",
             message: `Success Create Purchase Order`,
             data: newPO,
+            supplierID: req.body.supplierID,
+            requestUser: req.body.requestUser
          });
       } catch (error) {
-         
+         next(error)
+         console.log(error)
       }
       
    }
