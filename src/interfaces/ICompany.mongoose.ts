@@ -5,6 +5,7 @@ interface CompanyDocument extends mongoose.Document {
     address: string;
     logo: string;
     handphone: string;
+    status: boolean;
 }
 
 export { CompanyDocument };

@@ -7,14 +7,26 @@ class CompanyRoute {
       this.router = Router()
       this.home()
       this.create()
+      this.getone()
+      this.update()
+      this.delete()
    }
 
    public home(): void {
-      this.router.get('/', CompanyController.getOne)
+      this.router.get('/', CompanyController.getAll)
    }
 
    public create(): void {
       this.router.post('/', CompanyController.create)
+   }
+   public getone(): void {
+      this.router.get('/:id', CompanyController.getOne)
+   }
+   public update(): void {
+      this.router.patch('/:id', CompanyController.update)
+   }
+   public delete(): void {
+      this.router.delete('/:id', CompanyController.delete)
    }
 
 }

@@ -2,16 +2,36 @@ import { Request, Response, NextFunction } from 'express'
 import { CompanyModel } from "../models/company.model";
 
 class Company {
-   static getOne(req: Request, res: Response, next: NextFunction) {
-      res.status(200).json({
-         message: 'OK'
-      })
+   static async getOne(req: Request, res: Response, next: NextFunction) {
+      const idCompany = req.params.id
+      try {
+         const foundOneCompany = await CompanyModel.findById(idCompany)
+         res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: "Success Find One Company",
+            data: foundOneCompany,
+         });
+      } catch (error) {
+         
+      }
    }
 
    static getAll(req: Request, res: Response, next: NextFunction) {
-      res.status(200).json({
-         message: 'OK'
-      })
+      CompanyModel.find()
+            .then((resCompany) => {
+                res.status(200).json({
+                    success: true,
+                    statusCode: 200,
+                    responseStatus: "Status OK",
+                    message: "Success Find All Company",
+                    data: resCompany,
+                });
+            })
+            .catch((err) => {
+                next(err);
+            });
    }
 
    static async create(req: Request, res: Response, next: NextFunction) {
@@ -30,16 +50,60 @@ class Company {
       }
    }
 
-   static update(req: Request, res: Response, next: NextFunction) {
-      res.status(200).json({
-         message: 'OK'
-      })
+   static async update(req: Request, res: Response, next: NextFunction) {
+      try {
+         const companyID = req.params.id;
+         const editDataCompany: any = {
+             name: req.body.name,
+             address: req.body.address,
+             logo: req.body.logo,
+             handphone: req.body.handphone,
+         };
+
+         for (const key in editDataCompany) {
+             if (!editDataCompany[key]) {
+                 delete editDataCompany[key];
+             }
+         }
+         const updateDataCompany = await CompanyModel.findByIdAndUpdate(
+             companyID,
+             editDataCompany,
+             { new: true }
+         );
+         res.status(200).json({
+             success: true,
+             statusCode: 200,
+             responseStatus: "Status OK",
+             message: `Success edit Company`,
+             data: updateDataCompany,
+         });
+     } catch (error) {
+         next(error);
+     }
    }
 
-   static delete(req: Request, res: Response, next: NextFunction) {
-      res.status(200).json({
-         message: 'OK'
-      })
+   static async delete(req: Request, res: Response, next: NextFunction) {
+      const companyID = req.params.id;
+      const foundCompany = await CompanyModel.findById(companyID);
+
+      try {
+            if (!companyID) {
+               throw { name: "Params Is Empty" };
+            }
+            if (!foundCompany) {
+            throw { name: "Data Not Found" };
+            }
+      const updateStatus = await CompanyModel.findByIdAndUpdate( companyID, { status: false, name: foundCompany?.name }, { new: true });
+            res.status(200).json({
+                success: true,
+                statusCode: 200,
+                responseStatus: "Status OK",
+                message: "Delete Company",
+                data: updateStatus,
+            });
+        } catch (error) {
+            next(error);
+        }
    }
 
 }
