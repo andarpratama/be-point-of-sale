@@ -24,6 +24,10 @@ const companySchema = new Schema(
             type: String,
             required: true,
         },
+        status: {
+            type: Boolean,
+            default: true,
+        },
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );

@@ -5,6 +5,7 @@ interface ICompany extends Document {
     address: string;
     logo: string;
     handphone: string;
+    status: boolean;
 }
 
 export { ICompany };
