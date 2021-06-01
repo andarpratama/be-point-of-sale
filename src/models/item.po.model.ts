@@ -23,7 +23,11 @@ const ItemPurchaseSchema = new Schema(
       buyPrice: {
          type: Number,
          required: true
-      }
+      },
+      totalPrice: {
+         type: Number,
+         required: true
+      },
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );

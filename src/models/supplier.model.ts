@@ -32,4 +32,4 @@ const SupplierModel = mongoose.model<SupplierDocument, SupplierModelInterface>(
     "Supplier",
     supplierSchema
 );
-export { SupplierModel };
+export { SupplierModel, supplierSchema };

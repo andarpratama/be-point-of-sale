@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { PurchaseOrdeModel } from "../models/po.model";
 import { ItemPurchaseOrderModel } from "../models/item.po.model";
+import { SupplierModel } from "../models/supplier.model";
 
 class PurchaseOrderController {
    static async home(req: Request, res: Response, next: NextFunction) {
@@ -36,15 +37,18 @@ class PurchaseOrderController {
 
    static async addItem(req: Request, res: Response, next: NextFunction) {
       try {
+         let price = parseInt(req.body.quantity) * parseInt(req.body.buyPrice)
          const addedItem = await ItemPurchaseOrderModel.create({
             product: req.body.product,
             unit: req.body.unit,
-            quantity: req.body.quantity,
-            buyPrice: req.body.buyPrice
+            quantity: parseInt(req.body.quantity),
+            buyPrice: parseInt(req.body.buyPrice),
+            totalPrice: price
          })
 
          const pushedItem = await PurchaseOrdeModel.findByIdAndUpdate(req.params.id, {
-            $push: { 'items': addedItem._id}
+            $push: { 'items': addedItem._id },
+            $inc: {'subTotalPrice': price, 'totalPrice': price}
          }, {new: true})
 
          res.status(200).json({
@@ -52,7 +56,7 @@ class PurchaseOrderController {
             statusCode: 200,
             responseStatus: "Status OK",
             message: `Success Add Item to Purchase Order`,
-            dataItem: addedItem,
+            data: addedItem,
             dataPO: pushedItem
          });
       } catch (error) {
@@ -62,16 +66,51 @@ class PurchaseOrderController {
 
    static async deleteItem(req: Request, res: Response, next: NextFunction) {
       try {
+         const item:any = await ItemPurchaseOrderModel.findById(req.params.id_item)
+         let price:number = parseInt(item.totalPrice)
          const deletedItem = await PurchaseOrdeModel.findByIdAndUpdate(req.params.id_po, {
-            $pull: { 'items': req.params.id_item}
-         }, {new: true})
+            $pull: { 'items': req.params.id_item },
+            $inc: {'subTotalPrice': - price, 'totalPrice': - price}
+         }, { new: true })
+         
+         await ItemPurchaseOrderModel.findByIdAndDelete(req.params.id_item)
 
          res.status(200).json({
             success: true,
             statusCode: 200,
             responseStatus: "Status OK",
             message: `Success Delete Item from Purchase Order`,
-            dataPO: deletedItem
+         });
+      } catch (error) {
+         next(error)
+         console.log(error)
+      }
+   }
+
+   static async getItem(req: Request, res: Response, next: NextFunction) {
+      try {
+         const foundItem = await ItemPurchaseOrderModel.find()
+          res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: `Success Get Item from Purchase Order`,
+            data: foundItem
+         });
+      } catch (error) {
+         next(error)
+      }
+   }
+
+   static async getOneItem(req: Request, res: Response, next: NextFunction) {
+      try {
+         const foundItem = await ItemPurchaseOrderModel.findById(req.params.id_item)
+          res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: `Success Get One Item from Purchase Order`,
+            data: foundItem
          });
       } catch (error) {
          next(error)
@@ -107,11 +146,14 @@ class PurchaseOrderController {
          no_po = 'PO' + tahun.slice(2) + next_id(tanggal) + next_id(bulan) + next_id2(no_purchaseOrder.slice(8))
       }
       
+      console.log(req.body.supplierID)
+      console.log(req.body.requestUser)
+      const pushSupplier = await SupplierModel.findById(req.body.supplierID)
       
       try {
          const newPO = await PurchaseOrdeModel.create({
             no_po: no_po,
-            supplierID: req.body.supplierID,
+            supplierID: pushSupplier,
             requestUser: req.body.requestUser
          })
 
@@ -121,8 +163,6 @@ class PurchaseOrderController {
             responseStatus: "Status OK",
             message: `Success Create Purchase Order`,
             data: newPO,
-            supplierID: req.body.supplierID,
-            requestUser: req.body.requestUser
          });
       } catch (error) {
          next(error)
@@ -130,7 +170,6 @@ class PurchaseOrderController {
       }
       
    }
-
 
 
 }

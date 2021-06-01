@@ -35,12 +35,12 @@ class Routes {
     }
    
    
-    /* HOME --------------------------------------------- */
+    /* HOME ----------------------------------------------- */
     public home() {
         this.router.get("/", homeRoute);
     }
     
-    /* AUTH ---------------------------------------------- */
+    /* AUTH ----------------------------------------------- */
     public auth(): void {
         this.router.use("/api/v1/auth", authRoute);
     }
@@ -50,7 +50,7 @@ class Routes {
         this.router.use("/api/v1/user", userRoute);
     }
     
-    /* INVENTORY ----------------------------------------- */
+    /* INVENTORY ------------------------------------------ */
     public inventoryBrand(): void {
         this.router.use("/api/v1/inventory", inventoryBrandRoute);
     }
