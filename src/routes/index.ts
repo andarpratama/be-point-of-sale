@@ -7,12 +7,12 @@ import inventoryBrandRoute from "../routes/inventory.brand.route";
 import inventoryUnitRoute from "../routes/inventory.unit.route";
 import inventoryProductRoute from "../routes/inventory.product.route";
 import inventorySupplierRoute from "./inventory.supplier.route";
-// import financePoRoute from "./finance.po.route";
 import orderRoute from "./order.route";
 import homeRoute from "./home.route";
 import financeInvoiceRoute from "./finance.invoice.route"
 import companyRoute from "./company.route";
 import purchaseOrderRoute from "./purchase.order.route";
+import deliveryOrderRoute from "./delivery.order.route";
 
 
 class Routes {
@@ -27,31 +27,30 @@ class Routes {
         this.inventoryProduct();
         this.inventorySupplier();
         this.purchaseOrder()
-      //   this.financePo();
+        this.deliveryOrder()
         this.order();
         this.errorHandler();
         this.finanaceInvoice()
         this.company()
     }
-    //====================HOME ENDPOINT====================
+   
+   
+    /* HOME --------------------------------------------- */
     public home() {
         this.router.get("/", homeRoute);
     }
-    //====================END OF HOME ENDPOINT=============
-
-    //====================AUTH ENDPOINT====================
+    
+    /* AUTH ---------------------------------------------- */
     public auth(): void {
         this.router.use("/api/v1/auth", authRoute);
     }
-    //====================END OF AUTH ENDPOINT=============
-
-    //====================USER ENDPOINT====================
+    
+    /* USER ----------------------------------------------- */
     public user(): void {
         this.router.use("/api/v1/user", userRoute);
     }
-    //====================END OF USER ENDPOINT=============
-
-    //====================INVENTORY ENDPOINT===============
+    
+    /* INVENTORY ----------------------------------------- */
     public inventoryBrand(): void {
         this.router.use("/api/v1/inventory", inventoryBrandRoute);
     }
@@ -64,38 +63,36 @@ class Routes {
     public inventorySupplier(): void {
         this.router.use("/api/v1/inventory", inventorySupplierRoute);
     }
-    //====================END OF INVENTORY ENDPOINT=========
    
+    /* PURCHASE ORDER ------------------------------------ */
     public purchaseOrder():void {
        this.router.use("/api/v1/purchase-order", purchaseOrderRoute)
     }
+   
+   /* DELIVERY ORDER ------------------------------------ */
+    public deliveryOrder():void {
+       this.router.use("/api/v1/delivery-order", deliveryOrderRoute)
+    }
 
-    //====================FINANCE ENDPOINT==================
-   //  public financePo(): void {
-   //      this.router.use("/api/v1/finance", financePoRoute);
-   //  }
+    /* FINANCE -------------------------------------------- */
     public finanaceInvoice():void {
        this.router.use("/api/v1/finance", financeInvoiceRoute)
     }
-    //====================END OF FINANCE ENDPOINT===========
-
-    //====================ORDER ENDPOINT====================
+    
+    /* ORDER ----------------------------------------------- */
     public order(): void {
         this.router.use("/api/v1/order", orderRoute);
     }
-    //====================END OF ORDER ENDPOINT=============
    
-    
+     /* COMPANY --------------------------------------------- */
     public company():void {
        this.router.use('/api/v1/company', companyRoute)
     }
    
-
-    //====================ERROR HANDLER=====================
+     /* ERROR HANDLER ---------------------------------------- */
     public errorHandler(): void {
         this.router.use(ErrorHandler.handleErrors);
     }
-    //====================END OF ERROR HANDLER==============
 }
 
 export default new Routes().router;
