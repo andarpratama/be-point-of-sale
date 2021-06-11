@@ -206,14 +206,18 @@ class Auth {
                 throw { name: 'Invalid Password' };
             }
             const secretKey: string = (process.env.SECRET_KEY as string)
-         
             let token:any = jwt.sign({ id: foundUser.id }, secretKey);
+
+            const roleKey:string = (process.env.ROLE_KEY as string)
+            let tokenRole:any = jwt.sign({ roleAcess: foundUser.role }, roleKey);
+
             res.status(200).json({
                 success: true,
                 message: 'Login Success',
                 data: {
                     User: foundUser._id,
                     Authorization: `Bearer ${token}`,
+                    RoleAccess: `Bearer ${tokenRole}`,
                     expiresIn: 3600,
                 },
                 status: 'OK',

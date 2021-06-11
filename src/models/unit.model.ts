@@ -21,10 +21,6 @@ const unitSchema = new Schema(
             type: Number,
             default: 0
         },
-        buyPrice: {
-            type: Number,
-            default: 0
-        },
         stock: {
             type: Number,
             default: 0

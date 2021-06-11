@@ -7,6 +7,7 @@ interface UserDocument extends mongoose.Document {
    password: string,
    image: string,
    address: string,
+   role: string,
    city: string,
    telp: string,
    cartId: string[],

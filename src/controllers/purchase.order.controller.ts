@@ -166,9 +166,64 @@ class PurchaseOrderController {
          });
       } catch (error) {
          next(error)
-         console.log(error)
       }
       
+   }
+
+   static async addDiscount(req: Request, res: Response, next: NextFunction) {
+      const discountPrice = req.body.discountPrice
+      try {
+         const addedDiscount = await PurchaseOrdeModel.findByIdAndUpdate(req.params.id_po, {
+            discount: true,
+            discountPrice: discountPrice,
+            $inc: {'totalPrice': - parseInt(discountPrice)}
+         }, {new: true})
+
+         res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: `Success Add Discount`,
+            data: addedDiscount
+         });
+      } catch (error) {
+         next(error)
+         console.log(error)
+      }
+   }
+
+   static async deleteDiscount(req: Request, res: Response, next: NextFunction) {
+      try {
+         const foundPO:any = await PurchaseOrdeModel.findById(req.params.id_po)
+         const addedDiscount = await PurchaseOrdeModel.findByIdAndUpdate(req.params.id_po, {
+            discount: false,
+            discountPrice: foundPO.discountPrice,
+            $inc: {'totalPrice': + parseInt(foundPO.discountPrice)}
+         }, {new: true})
+
+         res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: `Success Delete Discount`,
+            data: addedDiscount
+         });
+      } catch (error) {
+         next(error)
+      }
+   }
+
+   static async endPuchaseOrder(req: Request, res: Response, next: NextFunction) {
+      try {
+         res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: `Success Ended Purchase Order`,
+         });
+      } catch (error) {
+         next(error)
+      }
    }
 
 

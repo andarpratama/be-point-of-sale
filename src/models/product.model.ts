@@ -25,9 +25,19 @@ const productSchema = new Schema(
             type: mongoose.Types.ObjectId,
             ref: "Unit",
         }],
+        statusProduct: {
+           type: String,
+           required: true,
+           enum: ['active', 'unactive'],
+           default: 'active'
+        },
         status: {
             type: Boolean,
             default: true,
+        },
+        purchaseAmount: {
+           type: Number,
+           default: 0,
         },
         brandID: brandSchema
     },

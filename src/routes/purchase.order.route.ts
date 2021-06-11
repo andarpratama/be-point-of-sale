@@ -13,6 +13,9 @@ class PurchaseOrderRoute {
       this.deleteItem()
       this.getItem()
       this.getOneItem()
+      this.addDiscount()
+      this.deleteDiscount()
+      this.endPurchaseOrder()
    }
 
    public home(): void {
@@ -37,6 +40,18 @@ class PurchaseOrderRoute {
 
    public getOneItem(): void {
       this.router.get('/item/:id_item', PurchaseOrderController.getOneItem)
+   }
+
+   public addDiscount(): void {
+      this.router.post('/add-discount/:id_po', PurchaseOrderController.addDiscount)
+   }
+
+   public deleteDiscount(): void {
+      this.router.delete('/del-discount/:id_po', PurchaseOrderController.deleteDiscount)
+   }
+
+   public endPurchaseOrder(): void {
+      this.router.get('/end-po/:id_po', PurchaseOrderController.endPuchaseOrder)
    }
 
    public deleteItem(): void {

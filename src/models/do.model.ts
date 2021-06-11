@@ -1,8 +1,10 @@
 import mongoose, { Schema } from "mongoose";
+import { puchaseOrderSchema } from "../models/po.model";
+import { IPurchaseOrder } from "../interfaces/IPurchaseOrder";
 
 interface IDeliveryOrder extends Document {
    no_do: string,
-   purchaseOrder: string,
+   purchaseOrder: IPurchaseOrder,
    deliveryDate: Date,
    recivedDate: Date,
    addressCompany: string,
@@ -12,7 +14,7 @@ interface IDeliveryOrder extends Document {
 
 interface DeliveryOrderDocument extends mongoose.Document {
    no_do: string,
-   purchaseOrder: string,
+   purchaseOrder: IPurchaseOrder,
    deliveryDate: Date,
    recivedDate: Date,
    addressCompany: string,
@@ -31,11 +33,11 @@ const deliveryOrderSchema = new Schema(
             unique: true,
             required: true
         },
-        purchaseOrder: {
+        purchaseOrder: puchaseOrderSchema,
+        items: [{
             type: mongoose.Types.ObjectId,
-            ref: "PurchaseOrder",
-            required: true
-        },
+            ref: "ItemDeliveryOrder",
+        }],
         deliveryDate: {
            type: Date,
         },
@@ -43,8 +45,7 @@ const deliveryOrderSchema = new Schema(
            type: Date,
         },
         addressCompany: {
-           type: String,
-           required: true
+           type: String
         },
         prosesStatus: {
            type: String,

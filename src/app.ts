@@ -19,6 +19,8 @@ class App {
       this.app.use(cors());
       this.app.use(express.json())
       this.app.use(express.urlencoded({ extended: true }))
+      // this.app.use("/public/img", express.static('public/img'));
+      this.app.use("/public/img", express.static(path.join("public/img")));
       mongoConnect()
    }
 

@@ -1,5 +1,8 @@
 import { Router } from "express";
 import InventoryProductController from "../controllers/inventory.product.controller";
+import { UploadImage } from "../middlewares/upploadImage";
+import multer from "multer";
+import path from "path";
 
 class InventoryProductRoutes {
     router: Router;
@@ -10,8 +13,11 @@ class InventoryProductRoutes {
         this.editInventoryProduct();
         this.deleteInventoryProduct();
         this.getDetailInventoryProduct();
+        this.activeProduct()
+        this.unactiveProduct()
+        this.uploadImage()
+        this.getDetailProductByCode()
     }
-
     public getInventoryProduct(): void {
         this.router.get(
             "/product",
@@ -24,11 +30,18 @@ class InventoryProductRoutes {
             InventoryProductController.postInventoryProduct
         );
     }
-   
-   
-   public pushUnitToProduct(): void {
-      
-   }
+    public activeProduct(): void {
+        this.router.get("/product/active/:id_product", InventoryProductController.activeProduct);
+    }
+    public unactiveProduct(): void {
+        this.router.get("/product/unactive/:id_product", InventoryProductController.unactiveProduct);
+    }
+    public uploadImage(): void {
+        this.router.post("/product/upload",InventoryProductController.uploadImage);
+    }
+    public getDetailProductByCode(): void {
+        this.router.get("/product/detailbycode/:code",InventoryProductController.getDetailByCode);
+    }
     public editInventoryProduct(): void {
         this.router.patch(
             "/product/:id",

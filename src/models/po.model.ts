@@ -31,8 +31,12 @@ const puchaseOrderSchema = new Schema(
         totalPrice: {
            type: Number,
            default: 0
-        },
+        }, 
         discount: {
+           type: Boolean,
+           default: false
+        },
+        discountPrice: {
            type: Number,
            default: 0
         },
@@ -43,8 +47,8 @@ const puchaseOrderSchema = new Schema(
         },
         prosesStatus: {
            type: String,
-           enum: ['pending', 'paid'],
-           default: 'pending'
+           enum: ['unfinish', 'pending', 'paid'],
+           default: 'unfinish'
         },
         status: {
            type: Boolean,
@@ -55,4 +59,4 @@ const puchaseOrderSchema = new Schema(
 );
 
 const PurchaseOrdeModel = mongoose.model<PurchaseOrderDocument, PoModelInterface>("PurchaseOrder", puchaseOrderSchema);
-export { PurchaseOrdeModel };
+export { PurchaseOrdeModel, puchaseOrderSchema };

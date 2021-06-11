@@ -1,6 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import { ProductModel } from "../models/product.model";
 import { BrandModel } from "../models/brand.model";
+import multer from "multer";
+import path from "path";
+
+let imageName!:string
+
+const storage = multer.diskStorage({
+   destination: './public/img',
+   filename: (req, file, callBack) => {
+      callBack(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+   }
+})
+
+const upload = multer({ storage: storage }).single('imageProduct')
 
 class InventoryProductController {
     static async postInventoryProduct( req: Request, res: Response,next: NextFunction) {
@@ -36,7 +49,8 @@ class InventoryProductController {
                 code: 'PRD' + codeBrand + codeProduct,
                 name: name,
                 image: image,
-                brandID: foundBrand
+                brandID: foundBrand,
+                statusProduct: 'active'
             });
             res.status(201).json({
                 success: true,
@@ -47,8 +61,31 @@ class InventoryProductController {
             });
         } catch (error) {
             next(error);
+            console.log(error)
         }
     }
+   
+   static uploadImage(req: Request, res: Response, next: NextFunction) {
+      try {
+         upload(req, res, (error:any) => {
+            if (error) {
+               throw { name: "Failed Upload Image" };
+            } else {
+               const hostname = req.headers.host;
+               console.log('http://' + hostname + '/' + req.file.path);
+                res.status(201).json({
+                  success: true,
+                  statusCode: 201,
+                  responseStatus: "Status OK",
+                  message: `Upload Image`,
+               });
+            }
+         })
+      } catch (error) {
+         next(error)
+      }
+   }
+    
     static getInventoryProduct(req: Request, res: Response, next: NextFunction) {
         ProductModel.find()
             .then((resProduct) => {
@@ -60,6 +97,45 @@ class InventoryProductController {
             .catch((err) => {
                 next(err);
             });
+    }
+   
+    static async activeProduct(req: Request, res: Response, next: NextFunction) {
+       try {
+          const activeProduct = await ProductModel.findByIdAndUpdate(req.params.id_product, {
+            statusProduct: 'active'
+          }, { new: true })
+          
+          res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: `Active Product`,
+            data: activeProduct
+          });
+
+       } catch (error) {
+          next(error)
+          console.log(error)
+       }
+    }
+   
+   static async unactiveProduct(req: Request, res: Response, next: NextFunction) {
+       try {
+           const unactiveProduct = await ProductModel.findByIdAndUpdate(req.params.id_product, {
+            statusProduct: 'unactive'
+           }, { new: true })
+          
+          res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: `Unactive Product`,
+            data: unactiveProduct
+          });
+       } catch (error) {
+          next(error)
+          console.log(error)
+       }
     }
 
     static async editInventoryProduct(req: Request, res: Response, next: NextFunction) {
@@ -119,11 +195,7 @@ class InventoryProductController {
             next(error);
         }
     }
-    static async getDetailInventoryProduct(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    static async getDetailInventoryProduct(req: Request, res: Response, next: NextFunction) {
         try {
             const detailProduct = await ProductModel.findById(req.params.id);
             return res.status(200).json({
@@ -131,6 +203,21 @@ class InventoryProductController {
                 statusCode: 200,
                 responseStatus: "Status OK",
                 message: "Get Detail Product",
+                data: detailProduct,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+   
+   static async getDetailByCode(req: Request, res: Response, next: NextFunction) {
+        try {
+            const detailProduct = await ProductModel.findOne({code: req.params.code});
+            return res.status(200).json({
+                success: true,
+                statusCode: 200,
+                responseStatus: "Status OK",
+                message: "Get Detail Product by Code",
                 data: detailProduct,
             });
         } catch (error) {

@@ -8,7 +8,7 @@ class InventoryUnitController {
         res: Response,
         next: NextFunction
     ) {
-        const { name, alias, sellPrice, buyPrice, stock, productID } = req.body;
+        const { name, alias, sellPrice, buyPrice, productID } = req.body;
         const allbody = { name, alias, sellPrice, buyPrice,  productID };
         try {
             if (!allbody) {
@@ -16,7 +16,6 @@ class InventoryUnitController {
             }
            
             const foundProduct = await ProductModel.findById(productID)
-            
             const newUnit = await UnitModel.create({
                name: name,
                alias: alias,
@@ -24,6 +23,10 @@ class InventoryUnitController {
                buyPrice: buyPrice,
                productID: foundProduct
             });
+           
+           await ProductModel.findByIdAndUpdate(productID, {
+               $push: { 'unitID': newUnit._id }
+            }, {new: true})
            
             res.status(201).json({
                 success: true,

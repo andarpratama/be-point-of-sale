@@ -3,8 +3,8 @@ import { Document } from "mongoose";
 interface IOrder extends Document {
     code: string;
     productID: string;
-    tax: number;
-    statusOrder: boolean;
+    tax: boolean;
+    statusOrder: string;
     totalPrice: number;
 }
 

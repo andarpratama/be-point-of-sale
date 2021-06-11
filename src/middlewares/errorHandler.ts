@@ -79,6 +79,13 @@ class ErrorHandler {
                 message =
                     "Missing Access Token: Please input your access token";
                 status = "Unauthorized";
+              break;
+            
+            case "Missing Role Access":
+                statusCode = 401;
+                message =
+                    "Missing Access Role: Please input your role access token";
+                status = "Unauthorized";
                 break;
 
             case 'Access Token Expired':
@@ -158,6 +165,12 @@ class ErrorHandler {
                 statusCode = 404;
                 message = "Data Not Found";
                 status = "Not Found";
+              break;
+            
+            case "Failed Upload Image":
+                statusCode = 404;
+                message = "Failed Upload Image";
+                status = "Failed Upload Image";
                 break;
 
             default:
