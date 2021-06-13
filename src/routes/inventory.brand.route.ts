@@ -9,7 +9,7 @@ class InventoryBrandRoutes {
         this.postInventoryBrand();
         this.editInventoryBrand();
         this.deleteInventoryBrand();
-        this.getOneInventoryBrand()
+        this.getOneInventoryBrand() 
     }
    
     public getOneInventoryBrand():void {

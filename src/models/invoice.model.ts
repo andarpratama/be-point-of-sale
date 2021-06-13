@@ -11,22 +11,27 @@ const invoiceSchema = new Schema({
       noInvoice:{
          type: String
       },
-      poID: {
+      purchasOrderID: {
          type: mongoose.Types.ObjectId,
          ref: "Po",
       },
-      deliveryDate: {
-         type: String
+      price: {
+         type: Number,
+         required: true
       },
-      deliveredDate: {
-         type: String
-      },
-      addreessCompany: {
-         type: String
+      company: {
+         type: mongoose.Types.ObjectId,
+         ref: "Company",
       },
       prosesStatus: {
-         type: Boolean
-      }
+         type: String,
+         enum: ['unfinish', 'paid'],
+         default: 'unfinish'
+      },
+      requestUser: {
+         type: mongoose.Types.ObjectId,
+         ref: "User",
+      },
    }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 )
 

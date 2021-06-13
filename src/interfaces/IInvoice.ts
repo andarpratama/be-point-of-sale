@@ -6,7 +6,7 @@ interface IInvoice extends Document {
    deliveryDate: string
    deliveredDate: string
    addreessCompany: string
-   prosesStatus: boolean
+   prosesStatus: string
 }
 
 export { IInvoice };

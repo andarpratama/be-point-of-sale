@@ -69,33 +69,6 @@ describe('GET /users/:userID/detail - User Info Endpoint', () => {
             statusCode: 401
         });
     });
-   //  it(`Should can handle the error, if user doesn't input their own bearer token for authorization`, async () => {
-   //      const userRegister = await registerUser({
-   //          username: 'john.doe',
-   //          email: 'john-doe@gmail.com',
-   //          password: '12345'
-   //      } as IUser);
-   //      expect(userRegister.status).toEqual(201);
-   //      const userLogin = await loginUser({
-   //          username: 'john.doe',
-   //          email: 'john-doe@gmail.com',
-   //          password: '12345'
-   //      } as IUser);
-   //      expect(userLogin.status).toEqual(200);
-   //      const userInfo = await infoUser(
-   //          userLoginResult.body.data.userID,
-   //          userLogin.body.data.bearerToken
-   //      );
-   //      expect(userInfo.status).toEqual(403);
-   //      expect(userInfo.body).toEqual({
-   //          success: false,
-   //          message:
-   //              'Forbidden Access: Sorry, access is restricted, make sure you use your own access token',
-   //          error: { name: 'Forbidden Access' },
-   //          status: 'Forbidden',
-   //          statusCode: 403
-   //      });
-   //  });
 });
 
 

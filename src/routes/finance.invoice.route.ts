@@ -5,16 +5,26 @@ class FinanceRoute {
    router: Router
    constructor() {
       this.router = Router()
-      this.home()
+      this.getAll()
+      this.getOne()
       this.create()
+      this.paidInvoice()
    }
 
-   public home(): void {
-      this.router.get('/invoice', FinanceInvoiceController.getOne)
+   public getAll(): void {
+      this.router.get('/invoice', FinanceInvoiceController.getAll)
+   }
+
+   public getOne(): void {
+      this.router.get('/invoice/:id', FinanceInvoiceController.getOne)
    }
 
    public create(): void {
       this.router.post('/invoice', FinanceInvoiceController.create)
+   }
+
+   public paidInvoice(): void {
+      this.router.get('/invoice/paid/:id_invoice', FinanceInvoiceController.paidInvoice)
    }
 
 }

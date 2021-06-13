@@ -172,6 +172,18 @@ class ErrorHandler {
                 message = "Failed Upload Image";
                 status = "Failed Upload Image";
                 break;
+            
+            case "Valid Quantity Delivery Order":
+                statusCode = 404;
+                message = "Quantity DO more than Quantity PO";
+                status = "Valid Quantity Delivery Order";
+                break;
+            
+            case "Data Has Been Addedd":
+                statusCode = 404;
+                message = "Data Has Been Addedd";
+                status = "Data Has Been Addedd";
+                break;
 
             default:
                 statusCode = 500;

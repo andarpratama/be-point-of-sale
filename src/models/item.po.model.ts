@@ -20,6 +20,10 @@ const ItemPurchaseSchema = new Schema(
          type: Number,
          required: true
       },
+      quantityTaken: {
+         type: Number,
+         default:0
+      },
       buyPrice: {
          type: Number,
          required: true
@@ -33,4 +37,4 @@ const ItemPurchaseSchema = new Schema(
 );
 
 const ItemPurchaseOrderModel = mongoose.model<IItemPODocument, PoModelInterface>("ItemPurchaseOrder", ItemPurchaseSchema);
-export { ItemPurchaseOrderModel };
+export { ItemPurchaseOrderModel, ItemPurchaseSchema };

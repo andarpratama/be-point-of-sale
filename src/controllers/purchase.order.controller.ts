@@ -37,6 +37,15 @@ class PurchaseOrderController {
 
    static async addItem(req: Request, res: Response, next: NextFunction) {
       try {
+         // Validasi jika product sudaha ada di Item Delivery Order
+         const thisPO:any = await PurchaseOrdeModel.findById(req.params.id)
+         // console.log(thisPO.items)
+         thisPO.items.forEach((item:any) => {
+            if (req.body.unit == item.unit) {
+               throw { name: "Data Has Been Addedd" };
+            }
+         });
+
          let price = parseInt(req.body.quantity) * parseInt(req.body.buyPrice)
          const addedItem = await ItemPurchaseOrderModel.create({
             product: req.body.product,
@@ -47,7 +56,7 @@ class PurchaseOrderController {
          })
 
          const pushedItem = await PurchaseOrdeModel.findByIdAndUpdate(req.params.id, {
-            $push: { 'items': addedItem._id },
+            $push: { 'items': addedItem },
             $inc: {'subTotalPrice': price, 'totalPrice': price}
          }, {new: true})
 
@@ -69,7 +78,7 @@ class PurchaseOrderController {
          const item:any = await ItemPurchaseOrderModel.findById(req.params.id_item)
          let price:number = parseInt(item.totalPrice)
          const deletedItem = await PurchaseOrdeModel.findByIdAndUpdate(req.params.id_po, {
-            $pull: { 'items': req.params.id_item },
+            $pull: { 'items': { _id: req.params.id_item } },
             $inc: {'subTotalPrice': - price, 'totalPrice': - price}
          }, { new: true })
          
@@ -215,11 +224,16 @@ class PurchaseOrderController {
 
    static async endPuchaseOrder(req: Request, res: Response, next: NextFunction) {
       try {
+         const endedPurchaseOrder = await PurchaseOrdeModel.findByIdAndUpdate(req.params.id_po, {
+            prosesStatus: 'pending',
+         }, { new: true })
+         
          res.status(200).json({
             success: true,
             statusCode: 200,
             responseStatus: "Status OK",
             message: `Success Ended Purchase Order`,
+            data: endedPurchaseOrder
          });
       } catch (error) {
          next(error)

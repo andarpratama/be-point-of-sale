@@ -10,6 +10,9 @@ class DeliveryOrderRoute {
       this.getOne()
       this.update()
       this.delete()
+      this.addItemDO()
+      this.deleteItemDO()
+      this.endDeliveryOrder()
    }
 
    public getAll(): void {
@@ -22,6 +25,18 @@ class DeliveryOrderRoute {
 
    public create(): void {
       this.router.post('/', deliveryOrderController.create)
+   }
+
+   public addItemDO(): void {
+      this.router.post('/add-item/:id_do', deliveryOrderController.addItem)
+   }
+
+   public deleteItemDO(): void {
+      this.router.delete('/delete-item/:id_item_do/:id_do/:id_item_po/:id_po', deliveryOrderController.deleteItem)
+   }
+
+   public endDeliveryOrder(): void {
+      this.router.get('/end-do/:id_do', deliveryOrderController.endDeliveryOrder)
    }
    
    public update(): void {

@@ -15,12 +15,11 @@ class CompanyRoute {
    public home(): void {
       this.router.get('/', CompanyController.getAll)
    }
-
    public create(): void {
       this.router.post('/', CompanyController.create)
    }
    public getone(): void {
-      this.router.get('/:id', CompanyController.getOne)
+      this.router.get('/detail', CompanyController.getOne)
    }
    public update(): void {
       this.router.patch('/:id', CompanyController.update)

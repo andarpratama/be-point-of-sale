@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { puchaseOrderSchema } from "../models/po.model";
 import { IPurchaseOrder } from "../interfaces/IPurchaseOrder";
+import { ItemDeliverySchema } from "../models/item.do.model";
 
 interface IDeliveryOrder extends Document {
    no_do: string,
@@ -34,10 +35,7 @@ const deliveryOrderSchema = new Schema(
             required: true
         },
         purchaseOrder: puchaseOrderSchema,
-        items: [{
-            type: mongoose.Types.ObjectId,
-            ref: "ItemDeliveryOrder",
-        }],
+        items: [ItemDeliverySchema],
         deliveryDate: {
            type: Date,
         },
@@ -49,8 +47,8 @@ const deliveryOrderSchema = new Schema(
         },
         prosesStatus: {
            type: String,
-           enum: ['pending','delivery', 'recived'],
-           default: 'pending',
+           enum: ['unfinish','finish'],
+           default: 'unfinish',
         },
         status: {
            type: Boolean,

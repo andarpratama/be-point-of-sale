@@ -6,7 +6,7 @@ interface InvoiceDocument extends mongoose.Document {
    deliveryDate: string
    deliveredDate: string
    addreessCompany: string
-   prosesStatus: boolean
+   prosesStatus: string
 }
 
 export { InvoiceDocument };

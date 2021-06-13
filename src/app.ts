@@ -30,6 +30,6 @@ class App {
 }
 
 const APP = new App().app;
-const PORT = process.env.SERVER_PORT
+const PORT = process.env.PORT
 
 export  { APP, PORT }

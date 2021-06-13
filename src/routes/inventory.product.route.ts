@@ -37,7 +37,7 @@ class InventoryProductRoutes {
         this.router.get("/product/unactive/:id_product", InventoryProductController.unactiveProduct);
     }
     public uploadImage(): void {
-        this.router.post("/product/upload",InventoryProductController.uploadImage);
+        this.router.post("/product/upload/:id_product",InventoryProductController.uploadImage);
     }
     public getDetailProductByCode(): void {
         this.router.get("/product/detailbycode/:code",InventoryProductController.getDetailByCode);

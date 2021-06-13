@@ -19,10 +19,18 @@ const ItemDeliverySchema = new Schema(
       quantity: {
          type: Number,
          required: true
+      },
+      id_po: {
+         type: mongoose.Types.ObjectId,
+         ref: "PurchaseOrder",
+      },
+      id_item_po: {
+         type: mongoose.Types.ObjectId,
+         ref: "ItemPurchaseOrder",
       }
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
 
 const ItemDeliveryOrderModel = mongoose.model<IItemDODocument, DoModelInterface>("ItemDeliveryOrder", ItemDeliverySchema);
-export { ItemDeliveryOrderModel };
+export { ItemDeliveryOrderModel, ItemDeliverySchema };

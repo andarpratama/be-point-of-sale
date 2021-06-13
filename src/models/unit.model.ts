@@ -29,6 +29,10 @@ const unitSchema = new Schema(
             type: Boolean,
             default: true,
         },
+        soldCount: {
+            type: Number,
+            default: 0
+        },
         productID: productSchema
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }

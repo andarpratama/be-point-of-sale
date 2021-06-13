@@ -37,7 +37,8 @@ class InventoryBrandController {
         if (!result) {
            code = '001'
         } else {
-           code = next_id(result.code)
+         //   code = next_id(result.code)
+           code = next_id(result.code.slice(5))
         }
         
         try {
@@ -47,7 +48,7 @@ class InventoryBrandController {
             }
             const newBrand = await BrandModel.create({
                 name: name,
-                code: code
+                code: 'BRAND' + code
             });
             res.status(201).json({
                 success: true,

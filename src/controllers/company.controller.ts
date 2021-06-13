@@ -3,7 +3,7 @@ import { CompanyModel } from "../models/company.model";
 
 class Company {
    static async getOne(req: Request, res: Response, next: NextFunction) {
-      const idCompany = req.params.id
+      const idCompany = '60c68f5f7816a512d4042920'
       try {
          const foundOneCompany = await CompanyModel.findById(idCompany)
          res.status(200).json({

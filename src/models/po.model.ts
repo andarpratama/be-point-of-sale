@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { IPurchaseOrder } from "../interfaces/IPurchaseOrder";
 import { PurchaseOrderDocument } from "../interfaces/IPurchaseOrder.mongoose";
 import { supplierSchema } from "../models/supplier.model";
+import { ItemPurchaseSchema } from "../models/item.po.model";
 
 interface PoModelInterface extends mongoose.Model<PurchaseOrderDocument> {
     build(attr: IPurchaseOrder): PurchaseOrderDocument;
@@ -12,10 +13,7 @@ const puchaseOrderSchema = new Schema(
         no_po: {
             type: String,
         },
-        items: [{
-            type: mongoose.Types.ObjectId,
-            ref: "ItemPurchaseOrderModel",
-        }],
+        items: [ItemPurchaseSchema],
         totalProduct: {
             type: Number,
             default: 0

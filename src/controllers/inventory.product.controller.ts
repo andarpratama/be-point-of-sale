@@ -9,7 +9,7 @@ let imageName!:string
 const storage = multer.diskStorage({
    destination: './public/img',
    filename: (req, file, callBack) => {
-      callBack(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+      callBack(null, 'product' + '-' + Date.now() + path.extname(file.originalname));
    }
 })
 
@@ -24,7 +24,7 @@ class InventoryProductController {
         let codeBrand:any = await BrandModel.findById(brandID)
         let foundBrand:any = await BrandModel.findById(brandID)
         codeBrand = codeBrand.code
-
+        codeBrand = codeBrand.slice(5)
         
          function next_id(input:string) {
             var output:any = parseInt(input, 10) + 1; // parse and increment
@@ -45,13 +45,16 @@ class InventoryProductController {
             if (!allbody) {
                 throw { name: "Input body Required" };
             }
+            const hostname = req.headers.host;
+
             const newProduct = await ProductModel.create({
                 code: 'PRD' + codeBrand + codeProduct,
                 name: name,
-                image: image,
+                image: `http://${hostname}/public/img/image.png`,
                 brandID: foundBrand,
                 statusProduct: 'active'
             });
+            
             res.status(201).json({
                 success: true,
                 statusCode: 201,
@@ -65,24 +68,32 @@ class InventoryProductController {
         }
     }
    
-   static uploadImage(req: Request, res: Response, next: NextFunction) {
+   static async uploadImage(req: Request, res: Response, next: NextFunction) {
+      const productID = req.params.id_product
       try {
-         upload(req, res, (error:any) => {
+         upload(req, res, async (error:any) => {
             if (error) {
                throw { name: "Failed Upload Image" };
             } else {
                const hostname = req.headers.host;
-               console.log('http://' + hostname + '/' + req.file.path);
+               const imageURL = 'http://' + hostname + '/' + req.file.path
+               const uploadedImage = await ProductModel.findByIdAndUpdate(productID, {
+                  image: imageURL
+               }, { new: true })
+               
                 res.status(201).json({
                   success: true,
                   statusCode: 201,
                   responseStatus: "Status OK",
                   message: `Upload Image`,
+                  data: uploadedImage,
+                  imageURL: imageURL
                });
             }
          })
       } catch (error) {
          next(error)
+         console.log(error)
       }
    }
     
@@ -144,7 +155,6 @@ class InventoryProductController {
             const editDataProduct: any = {
                 code: req.body.code,
                 name: req.body.name,
-                image: req.body.image,
             };
 
             for (const key in editDataProduct) {
