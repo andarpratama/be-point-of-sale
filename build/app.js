@@ -18,7 +18,8 @@ class App {
         this.router();
     }
     plugin() {
-        dotenv_1.default.config({ path: this.envPath });
+        // dotenv.config({path: this.envPath})
+        dotenv_1.default.config();
         this.app.use(cors_1.default());
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: true }));

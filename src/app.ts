@@ -15,7 +15,8 @@ class App {
    }
 
    protected plugin(): void{
-      dotenv.config({path: this.envPath})
+      // dotenv.config({path: this.envPath})
+      dotenv.config()
       this.app.use(cors());
       this.app.use(express.json())
       this.app.use(express.urlencoded({ extended: true }))
