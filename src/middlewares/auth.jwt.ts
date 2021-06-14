@@ -23,27 +23,27 @@ class authJwt {
         }
     }
 
-   //  static async authorization(
-   //      req: Request,
-   //      _res: Response,
-   //      next: NextFunction
-   //  ) {
-   //      try {
-   //          const foundUser = await UserModel.findOne({ _id: req.userTokenID });
-   //          // User not found, when do query using access token's ID from user model
-   //          if (!foundUser) {
-   //              throw { name: 'Access Token not Assosiated' };
-   //          }
-   //          if (String(foundUser._id) === req.params.userID) {
-   //              next();
-   //          } else {
-   //              // When found user's ID not match with user's ID from params
-   //              throw { name: 'Forbidden Access' };
-   //          }
-   //      } catch (err) {
-   //          next(err);
-   //      }
-   //  }
+    static async authorization(
+        req: Request,
+        _res: Response,
+        next: NextFunction
+    ) {
+        try {
+            const foundUser = await UserModel.findOne({ _id: (<any>req).userId });
+            // User not found, when do query using access token's ID from user model
+            if (!foundUser) {
+                throw { name: 'Access Token not Assosiated' };
+            }
+            if (String(foundUser._id) === req.params.userID) {
+                next();
+            } else {
+                // When found user's ID not match with user's ID from params
+                throw { name: 'Forbidden Access' };
+            }
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export { authJwt };

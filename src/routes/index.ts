@@ -13,6 +13,8 @@ import financeInvoiceRoute from "./finance.invoice.route"
 import companyRoute from "./company.route";
 import purchaseOrderRoute from "./purchase.order.route";
 import deliveryOrderRoute from "./delivery.order.route";
+import { authJwt } from "../middlewares/auth.jwt";
+import financeReportRoute from "./finance.report.route";
 
 
 class Routes {
@@ -21,6 +23,7 @@ class Routes {
         this.router = Router();
         this.home();
         this.auth();
+        this.authentication()
         this.user();
         this.inventoryBrand();
         this.inventoryUnit();
@@ -31,6 +34,7 @@ class Routes {
         this.order();
         this.errorHandler();
         this.finanaceInvoice()
+        this.financeReport()
         this.company()
     }
    
@@ -38,6 +42,11 @@ class Routes {
     /* HOME ----------------------------------------------- */
     public home() {
         this.router.get("/", homeRoute);
+    }
+   
+   /* AUTH ----------------------------------------------- */
+   public authentication(): void {
+        this.router.use(authJwt.authentication)
     }
     
     /* AUTH ----------------------------------------------- */
@@ -77,6 +86,10 @@ class Routes {
     /* FINANCE -------------------------------------------- */
     public finanaceInvoice():void {
        this.router.use("/api/v1/finance", financeInvoiceRoute)
+    }
+   
+    public financeReport():void {
+       this.router.use("/api/v1/finance", financeReportRoute)
     }
     
     /* ORDER ----------------------------------------------- */

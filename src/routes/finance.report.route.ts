@@ -1,31 +1,32 @@
 import { Router } from 'express'
 import CompanyController from "../controllers/company.controller";
+import FinanceReport from '../controllers/finance.report.controller';
 
 class EstatementRoute {
    router: Router
    constructor() {
       this.router = Router()
-      this.home()
+      this.getAll()
+      this.getOne()
       this.create()
-      this.getone()
       this.update()
       this.delete()
    }
 
-   public home(): void {
-      this.router.get('/', CompanyController.getAll)
+   public getAll(): void {
+      this.router.get('/report', FinanceReport.getAll)
+   }
+   public getOne(): void {
+      this.router.get('/report/:id', FinanceReport.getOne)
    }
    public create(): void {
-      this.router.post('/', CompanyController.create)
-   }
-   public getone(): void {
-      this.router.get('/detail', CompanyController.getOne)
+      this.router.post('/report/', CompanyController.create)
    }
    public update(): void {
-      this.router.patch('/:id', CompanyController.update)
+      this.router.patch('/report/:id', CompanyController.update)
    }
    public delete(): void {
-      this.router.delete('/:id', CompanyController.delete)
+      this.router.delete('/report/:id', CompanyController.delete)
    }
 
 }

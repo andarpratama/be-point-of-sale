@@ -3,6 +3,9 @@ import { OrderModel } from "../models/order.model";
 import { ItemOrderModel } from "../models/item.order.model";
 import { UnitModel } from "../models/unit.model";
 import ErrorHandler from "../middlewares/errorHandler";
+import { ProductModel } from "../models/product.model";
+import { EstatementModel } from "../models/estatement.model";
+import { ItemPurchaseSchema } from "../models/item.po.model";
 
 class OrderController {
     static async createOrder(req: Request, res: Response, next: NextFunction) {
@@ -112,12 +115,16 @@ class OrderController {
    static async addItemOrder(req: Request, res: Response, next: NextFunction) {
       let { product, unit, quantity, priceTotal } = req.body
 
+      // Get id product dari code product
+      const foundProduct:any = await ProductModel.findOne({code: product})
+      const productID = foundProduct._id
+
       const foundUnit:any = await UnitModel.findById(unit)
       priceTotal = parseInt(quantity) * parseInt(foundUnit.sellPrice)
 
       try {
          const addedItem = await ItemOrderModel.create({
-            product: product,
+            product: productID,
             unit: unit,
             quantity: quantity,
             priceTotal: priceTotal,
@@ -148,22 +155,37 @@ class OrderController {
 
    static async paid(req: Request, res: Response, next: NextFunction) {
       let { totalPrice, pricePaid } = req.body
-      const refund = pricePaid - totalPrice
-      console.log(refund)
-      console.log(req.params.id_order)
+      const refund = parseInt(pricePaid)  - parseInt(totalPrice)
+
       try {
-         const paidOrder = await OrderModel.findByIdAndUpdate(req.params.id_order, {
+         const paidOrder:any = await OrderModel.findByIdAndUpdate(req.params.id_order, {
             pricePaid: pricePaid,
             statusOrder: 'paid',
             refund: refund
          }, { new: true })
+
+         const incomeInvoice = await EstatementModel.create({
+            name: 'Order' + ' ' + paidOrder.nota,
+            debit: totalPrice,
+         })
+
+         // Update stock di produk unit
+         const foundDataOrder:any = await OrderModel.findById(req.params.id_order)
+         const itemOrder = foundDataOrder.items
+         itemOrder.forEach(async (item:any) => {
+            const unitID = item.unit
+            const updatedStock = await UnitModel.findByIdAndUpdate(unitID, {
+               $inc: {'stock': - item.quantity, 'soldCount': item.quantity}
+            }, {new: true})
+         });
          
          res.status(200).json({
             success: true,
             statusCode: 201,
             responseStatus: "Status OK",
             message: `Paid Order`,
-            data: paidOrder
+            data: paidOrder,
+            incomeInvoice: incomeInvoice
          });
       } catch (error) {
          next(error)
@@ -174,10 +196,8 @@ class OrderController {
       try {
          const foundOrder:any = await OrderModel.findById(req.params.id_order)
          const taxPrice = (10 / 100) * foundOrder.totalPrice 
-         const totalPrice = foundOrder.totalPrice - taxPrice
-         // console.log('harga asli' + foundOrder.totalPrice)
-         // console.log('harga setelah tax' + totalPrice)
-         // console.log('harga tax' + taxPrice)
+         const totalPrice = foundOrder.totalPrice + taxPrice
+
          const addedTax = await OrderModel.findByIdAndUpdate(req.params.id_order, {
             tax: true,
             totalPrice: totalPrice,
@@ -199,7 +219,7 @@ class OrderController {
    static async deleteTax(req: Request, res: Response, next: NextFunction) {
       try {
          const foundOrder:any = await OrderModel.findById(req.params.id_order)
-         const deletedTax = foundOrder.totalPrice + foundOrder.taxPrice
+         const deletedTax = foundOrder.totalPrice - foundOrder.taxPrice
          const deleteTaxt = await OrderModel.findByIdAndUpdate(req.params.id_order, {
             tax: false,
             totalPrice: deletedTax,
