@@ -40,5 +40,5 @@ class App {
 }
 const APP = new App().app;
 exports.APP = APP;
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 exports.PORT = PORT;

@@ -2,10 +2,9 @@
   "name": "assign4-backend",
   "version": "1.0.0",
   "description": "Ayu udah access Wellington juga",
-  "main": "index.js",
+  "main": "app.ts",
   "scripts": {
     "start": "node build/server.js",
-    "build": "rm -rf build & tsc",
     "dev": "nodemon ./src/server.ts",
     "test": "env-cmd -f ./env/test.env jest --watchAll --runInBand"
   },
