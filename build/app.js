@@ -26,6 +26,13 @@ class App {
         // this.app.use("/public/img", express.static('public/img'));
         this.app.use("/public/img", express_1.default.static(path_1.default.join("public/img")));
         mongo_connect_1.default();
+        this.app.use((req, res, next) => {
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.setHeader("Access-Control-Expose-Headers", "Authorization");
+            res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+            res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+            next();
+        });
     }
     router() {
         this.app.use(index_1.default);

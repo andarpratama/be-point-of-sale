@@ -1,4 +1,4 @@
-import express, { Application } from 'express'
+import express, {Application, NextFunction, Request, Response} from 'express'
 import mongoConnect from './config/mongo.connect'
 import Routes from './routes/index';
 import dotenv from 'dotenv'
@@ -23,6 +23,20 @@ class App {
       // this.app.use("/public/img", express.static('public/img'));
       this.app.use("/public/img", express.static(path.join("public/img")));
       mongoConnect()
+
+      this.app.use((req : Request, res: Response, next: NextFunction) => {
+         res.setHeader("Access-Control-Allow-Origin", "*");
+         res.setHeader("Access-Control-Expose-Headers", "Authorization")
+         res.setHeader(
+            "Access-Control-Allow-Headers",
+            "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+         );
+         res.setHeader(
+            "Access-Control-Allow-Methods",
+            "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+         );
+         next();
+      });
    }
 
    public router(): void {
