@@ -30,6 +30,26 @@ class FinanceReport {
       }
    }
 
+   static async getReportByDate(req: Request, res: Response, next: NextFunction) {
+      const starDate: any = req.body.star_date;
+      const endDate: any = req.body.end_date;
+      const dateRange: object = { $gte: starDate, $lte: endDate }
+      try {
+         const financeReport = await EstatementModel.find({updated_at: dateRange})
+         // getInvoices = await Invoice.find({ status: "paid", updatedAt: dateRange })
+         res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Success get Data Estatement by Date",
+            data: financeReport,
+            starDate: starDate,
+            endDate: endDate
+         });
+      } catch (error) {
+         next(error)
+      }
+   }
+
    static delete(req: Request, res: Response, next: NextFunction) {
       res.status(200).json({
          message: 'OK'

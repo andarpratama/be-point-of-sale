@@ -17,6 +17,7 @@ class InventoryProductRoutes {
         this.unactiveProduct()
         this.uploadImage()
         this.getDetailProductByCode()
+        this.getTopTen()
     }
     public getInventoryProduct(): void {
         this.router.get(
@@ -42,23 +43,17 @@ class InventoryProductRoutes {
     public getDetailProductByCode(): void {
         this.router.get("/product/detailbycode/:code",InventoryProductController.getDetailByCode);
     }
+    public getTopTen(): void {
+        this.router.get("/product/topten",InventoryProductController.getTopTen);
+    }
     public editInventoryProduct(): void {
-        this.router.patch(
-            "/product/:id",
-            InventoryProductController.editInventoryProduct
-        );
+      this.router.patch("/product/:id", InventoryProductController.editInventoryProduct);
     }
     public deleteInventoryProduct(): void {
-        this.router.delete(
-            "/product/:id",
-            InventoryProductController.deleteInventoryProduct
-        );
+        this.router.delete("/product/:id", InventoryProductController.deleteInventoryProduct);
     }
     public getDetailInventoryProduct(): void {
-        this.router.get(
-            "/product/:id/detail",
-            InventoryProductController.getDetailInventoryProduct
-        );
+        this.router.get("/product/:id/detail", InventoryProductController.getDetailInventoryProduct);
     }
 }
 

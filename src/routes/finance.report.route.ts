@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import CompanyController from "../controllers/company.controller";
 import FinanceReport from '../controllers/finance.report.controller';
 
 class EstatementRoute {
@@ -8,9 +7,10 @@ class EstatementRoute {
       this.router = Router()
       this.getAll()
       this.getOne()
-      this.create()
-      this.update()
-      this.delete()
+      this.getAllByDate()
+      // this.create()
+      // this.update()
+      // this.delete()
    }
 
    public getAll(): void {
@@ -19,14 +19,8 @@ class EstatementRoute {
    public getOne(): void {
       this.router.get('/report/:id', FinanceReport.getOne)
    }
-   public create(): void {
-      this.router.post('/report/', CompanyController.create)
-   }
-   public update(): void {
-      this.router.patch('/report/:id', CompanyController.update)
-   }
-   public delete(): void {
-      this.router.delete('/report/:id', CompanyController.delete)
+   public getAllByDate(): void {
+      this.router.post('/report/bydate', FinanceReport.getReportByDate)
    }
 
 }

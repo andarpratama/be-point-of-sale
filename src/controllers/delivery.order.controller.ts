@@ -89,7 +89,7 @@ class deliveryOrderController {
             statusCode: 201,
             responseStatus: "Status OK",
             message: `CREATE Delivery Order`,
-            data: dataDO
+            data: newDeliveryOrder
          });
       } catch (error) {
          next(error)

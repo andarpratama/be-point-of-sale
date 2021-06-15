@@ -3,6 +3,7 @@ import { ProductModel } from "../models/product.model";
 import { BrandModel } from "../models/brand.model";
 import multer from "multer";
 import path from "path";
+import { UnitModel } from "../models/unit.model";
 
 let imageName!:string
 
@@ -233,7 +234,24 @@ class InventoryProductController {
         } catch (error) {
             next(error);
         }
-    }
+   }
+   
+   static async getTopTen(req: Request, res: Response, next: NextFunction) {
+      try {
+         const topTenProduct = await UnitModel.find({}).sort({
+            soldCount: -1
+         })
+         res.status(200).json({
+            success: true,
+            statusCode: 200,
+            responseStatus: "Status OK",
+            message: "Get Top ten Product",
+            data:topTenProduct
+         });
+      } catch (error) {
+         next(error)
+      }
+   }
 }
 
 export default InventoryProductController;
