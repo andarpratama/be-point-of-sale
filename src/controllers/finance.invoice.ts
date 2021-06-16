@@ -7,7 +7,7 @@ import { PurchaseOrdeModel } from '../models/po.model';
 class InventoryInvoice {
    static async getAll(req: Request, res: Response, next: NextFunction) {
       try {
-         const allInvoice =  await InvoiceModel.find()
+         const allInvoice =  await InvoiceModel.find().sort({created_at: 'desc'})
          res.status(200).json({
             success: true,
             statusCode: 200,

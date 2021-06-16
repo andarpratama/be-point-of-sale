@@ -4,7 +4,7 @@ import { EstatementModel } from '../models/estatement.model';
 class FinanceReport {
    static async getAll(req: Request, res: Response, next: NextFunction) {
       try {
-         const dataEstatement =  await EstatementModel.find()
+         const dataEstatement =  await EstatementModel.find().sort({created_at: 'desc'})
          res.status(200).json({
             success: true,
             statusCode: 200,

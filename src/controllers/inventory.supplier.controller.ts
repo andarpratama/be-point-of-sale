@@ -35,7 +35,7 @@ class InventorySupplierController {
         res: Response,
         next: NextFunction
     ) {
-        SupplierModel.find()
+        SupplierModel.find().sort({created_at: 'desc'})
             .then((resSupplier) => {
                 res.status(201).json({
                     message: "Success Find All Supplier",

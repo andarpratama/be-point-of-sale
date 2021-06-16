@@ -6,7 +6,7 @@ import { SupplierModel } from "../models/supplier.model";
 class PurchaseOrderController {
    static async home(req: Request, res: Response, next: NextFunction) {
       try {
-         const purchase_orders = await PurchaseOrdeModel.find()
+         const purchase_orders = await PurchaseOrdeModel.find().sort({created_at: 'desc'})
          res.status(200).json({
             success: true,
             statusCode: 200,

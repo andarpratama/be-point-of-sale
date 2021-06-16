@@ -57,7 +57,7 @@ class OrderController {
       }
     }
     static getOrder(req: Request, res: Response, next: NextFunction) {
-        OrderModel.find()
+        OrderModel.find().sort({created_at: 'desc'})
          .then((resOrder) => {
                res.status(201).json({
                   message: "Success Find All Order",
@@ -123,6 +123,18 @@ class OrderController {
       priceTotal = parseInt(quantity) * parseInt(foundUnit.sellPrice)
 
       try {
+         const foundOrder:any = await OrderModel.findById(req.params.id_order)
+         const itemOrderID = foundOrder.items
+
+         for (let idItem of itemOrderID) {
+            const foundUnit:any = await UnitModel.findById(idItem.unit)
+            console.log(foundUnit._id)
+            console.log(unit)
+            if (unit == foundUnit._id) {
+               throw { name: "Data Has Been Addedd" };
+            }
+         }
+
          const addedItem = await ItemOrderModel.create({
             product: productID,
             unit: unit,

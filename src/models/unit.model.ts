@@ -12,10 +12,12 @@ const unitSchema = new Schema(
         name: {
             type: String,
             required: true,
+            unique: true
         },
         alias: {
             type: String,
             required: true,
+            unique: true
         },
         sellPrice: {
             type: Number,

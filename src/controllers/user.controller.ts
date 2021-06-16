@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 
 class UserController {
     static async getAllUser(req: Request, res: Response) {
-        const allUser = await UserModel.find()
+        const allUser = await UserModel.find().sort({created_at: 'desc'})
         res.status(200).json({
             success: true,
             statusCode: 200,

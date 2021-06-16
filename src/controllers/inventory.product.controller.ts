@@ -68,6 +68,30 @@ class InventoryProductController {
             console.log(error)
         }
     }
+
+   static async filterProductByBrand(req: Request, res: Response, next: NextFunction) {
+      try {
+         const filterProduct: any = await ProductModel.find({
+            'brandID._id' : req.params.brand
+         })
+         console.log(filterProduct)
+         // filterProduct.forEach((item:any) => {
+         //    console.log(item.brandID._id)
+         // });
+         // const filterProduct = await ProductModel.find({}).sort({
+         //    soldCount: -1
+         // })
+         res.status(201).json({
+            success: true,
+            statusCode: 201,
+            responseStatus: "Status OK",
+            message: `Success filter `,
+            data:filterProduct
+         });
+      } catch (error) {
+         next(error)
+      }
+   }
    
    static async uploadImage(req: Request, res: Response, next: NextFunction) {
       const productID = req.params.id_product
@@ -99,7 +123,7 @@ class InventoryProductController {
    }
     
     static getInventoryProduct(req: Request, res: Response, next: NextFunction) {
-        ProductModel.find()
+        ProductModel.find().sort({created_at: 'desc'})
             .then((resProduct) => {
                 res.status(201).json({
                     message: "Success Find All Product",
@@ -240,7 +264,8 @@ class InventoryProductController {
       try {
          const topTenProduct = await UnitModel.find({}).sort({
             soldCount: -1
-         })
+         }).limit(10)
+
          res.status(200).json({
             success: true,
             statusCode: 200,

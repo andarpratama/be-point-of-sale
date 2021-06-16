@@ -18,6 +18,7 @@ class InventoryProductRoutes {
         this.uploadImage()
         this.getDetailProductByCode()
         this.getTopTen()
+        this.filterByBrand()
     }
     public getInventoryProduct(): void {
         this.router.get(
@@ -45,6 +46,9 @@ class InventoryProductRoutes {
     }
     public getTopTen(): void {
         this.router.get("/product/topten",InventoryProductController.getTopTen);
+    }
+    public filterByBrand(): void {
+        this.router.get("/product/filter/:brand",InventoryProductController.filterProductByBrand);
     }
     public editInventoryProduct(): void {
       this.router.patch("/product/:id", InventoryProductController.editInventoryProduct);

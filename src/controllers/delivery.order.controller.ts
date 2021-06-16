@@ -9,7 +9,7 @@ import { UnitModel } from "../models/unit.model";
 class deliveryOrderController {
    static async home(req: Request, res: Response, next: NextFunction) {
       try {
-         const doData = await deliveryOrderModel.find()
+         const doData = await deliveryOrderModel.find().sort({created_at: 'desc'})
          res.status(200).json({
             success: true,
             statusCode: 200,
