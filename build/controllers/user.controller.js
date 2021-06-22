@@ -18,7 +18,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 class UserController {
     static getAllUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const allUser = yield user_model_1.UserModel.find();
+            const allUser = yield user_model_1.UserModel.find().sort({ created_at: 'desc' });
             res.status(200).json({
                 success: true,
                 statusCode: 200,

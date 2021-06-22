@@ -17,7 +17,7 @@ class InventoryInvoice {
     static getAll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const allInvoice = yield invoice_model_1.InvoiceModel.find();
+                const allInvoice = yield invoice_model_1.InvoiceModel.find().sort({ created_at: 'desc' });
                 res.status(200).json({
                     success: true,
                     statusCode: 200,

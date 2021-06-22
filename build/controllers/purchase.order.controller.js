@@ -16,7 +16,7 @@ class PurchaseOrderController {
     static home(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const purchase_orders = yield po_model_1.PurchaseOrdeModel.find();
+                const purchase_orders = yield po_model_1.PurchaseOrdeModel.find().sort({ created_at: 'desc' });
                 res.status(200).json({
                     success: true,
                     statusCode: 200,

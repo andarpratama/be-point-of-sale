@@ -18,7 +18,7 @@ class deliveryOrderController {
     static home(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const doData = yield do_model_1.deliveryOrderModel.find();
+                const doData = yield do_model_1.deliveryOrderModel.find().sort({ created_at: 'desc' });
                 res.status(200).json({
                     success: true,
                     statusCode: 200,
@@ -97,7 +97,7 @@ class deliveryOrderController {
                     statusCode: 201,
                     responseStatus: "Status OK",
                     message: `CREATE Delivery Order`,
-                    data: dataDO
+                    data: newDeliveryOrder
                 });
             }
             catch (error) {

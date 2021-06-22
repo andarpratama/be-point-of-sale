@@ -38,7 +38,7 @@ class InventorySupplierController {
         });
     }
     static getInventorySupplier(req, res, next) {
-        supplier_model_1.SupplierModel.find()
+        supplier_model_1.SupplierModel.find().sort({ created_at: 'desc' })
             .then((resSupplier) => {
             res.status(201).json({
                 message: "Success Find All Supplier",

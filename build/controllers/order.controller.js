@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const order_model_1 = require("../models/order.model");
 const item_order_model_1 = require("../models/item.order.model");
 const unit_model_1 = require("../models/unit.model");
+const product_model_1 = require("../models/product.model");
+const estatement_model_1 = require("../models/estatement.model");
 class OrderController {
     static createOrder(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -63,7 +65,7 @@ class OrderController {
         });
     }
     static getOrder(req, res, next) {
-        order_model_1.OrderModel.find()
+        order_model_1.OrderModel.find().sort({ created_at: 'desc' })
             .then((resOrder) => {
             res.status(201).json({
                 message: "Success Find All Order",
@@ -123,11 +125,24 @@ class OrderController {
     static addItemOrder(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             let { product, unit, quantity, priceTotal } = req.body;
+            // Get id product dari code product
+            const foundProduct = yield product_model_1.ProductModel.findOne({ code: product });
+            const productID = foundProduct._id;
             const foundUnit = yield unit_model_1.UnitModel.findById(unit);
             priceTotal = parseInt(quantity) * parseInt(foundUnit.sellPrice);
             try {
+                const foundOrder = yield order_model_1.OrderModel.findById(req.params.id_order);
+                const itemOrderID = foundOrder.items;
+                for (let idItem of itemOrderID) {
+                    const foundUnit = yield unit_model_1.UnitModel.findById(idItem.unit);
+                    console.log(foundUnit._id);
+                    console.log(unit);
+                    if (unit == foundUnit._id) {
+                        throw { name: "Data Has Been Addedd" };
+                    }
+                }
                 const addedItem = yield item_order_model_1.ItemOrderModel.create({
-                    product: product,
+                    product: productID,
                     unit: unit,
                     quantity: quantity,
                     priceTotal: priceTotal,
@@ -153,21 +168,33 @@ class OrderController {
     static paid(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             let { totalPrice, pricePaid } = req.body;
-            const refund = pricePaid - totalPrice;
-            console.log(refund);
-            console.log(req.params.id_order);
+            const refund = parseInt(pricePaid) - parseInt(totalPrice);
             try {
                 const paidOrder = yield order_model_1.OrderModel.findByIdAndUpdate(req.params.id_order, {
                     pricePaid: pricePaid,
                     statusOrder: 'paid',
                     refund: refund
                 }, { new: true });
+                const incomeInvoice = yield estatement_model_1.EstatementModel.create({
+                    name: 'Order' + ' ' + paidOrder.nota,
+                    debit: totalPrice,
+                });
+                // Update stock di produk unit
+                const foundDataOrder = yield order_model_1.OrderModel.findById(req.params.id_order);
+                const itemOrder = foundDataOrder.items;
+                itemOrder.forEach((item) => __awaiter(this, void 0, void 0, function* () {
+                    const unitID = item.unit;
+                    const updatedStock = yield unit_model_1.UnitModel.findByIdAndUpdate(unitID, {
+                        $inc: { 'stock': -item.quantity, 'soldCount': item.quantity }
+                    }, { new: true });
+                }));
                 res.status(200).json({
                     success: true,
                     statusCode: 201,
                     responseStatus: "Status OK",
                     message: `Paid Order`,
-                    data: paidOrder
+                    data: paidOrder,
+                    incomeInvoice: incomeInvoice
                 });
             }
             catch (error) {
@@ -180,10 +207,7 @@ class OrderController {
             try {
                 const foundOrder = yield order_model_1.OrderModel.findById(req.params.id_order);
                 const taxPrice = (10 / 100) * foundOrder.totalPrice;
-                const totalPrice = foundOrder.totalPrice - taxPrice;
-                // console.log('harga asli' + foundOrder.totalPrice)
-                // console.log('harga setelah tax' + totalPrice)
-                // console.log('harga tax' + taxPrice)
+                const totalPrice = foundOrder.totalPrice + taxPrice;
                 const addedTax = yield order_model_1.OrderModel.findByIdAndUpdate(req.params.id_order, {
                     tax: true,
                     totalPrice: totalPrice,
@@ -206,7 +230,7 @@ class OrderController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const foundOrder = yield order_model_1.OrderModel.findById(req.params.id_order);
-                const deletedTax = foundOrder.totalPrice + foundOrder.taxPrice;
+                const deletedTax = foundOrder.totalPrice - foundOrder.taxPrice;
                 const deleteTaxt = yield order_model_1.OrderModel.findByIdAndUpdate(req.params.id_order, {
                     tax: false,
                     totalPrice: deletedTax,

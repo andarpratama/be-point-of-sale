@@ -17,6 +17,8 @@ class InventoryProductRoutes {
         this.unactiveProduct();
         this.uploadImage();
         this.getDetailProductByCode();
+        this.getTopTen();
+        this.filterByBrand();
     }
     getInventoryProduct() {
         this.router.get("/product", inventory_product_controller_1.default.getInventoryProduct);
@@ -35,6 +37,12 @@ class InventoryProductRoutes {
     }
     getDetailProductByCode() {
         this.router.get("/product/detailbycode/:code", inventory_product_controller_1.default.getDetailByCode);
+    }
+    getTopTen() {
+        this.router.get("/product/topten", inventory_product_controller_1.default.getTopTen);
+    }
+    filterByBrand() {
+        this.router.get("/product/filter/:brand", inventory_product_controller_1.default.filterProductByBrand);
     }
     editInventoryProduct() {
         this.router.patch("/product/:id", inventory_product_controller_1.default.editInventoryProduct);

@@ -17,10 +17,33 @@ class InventoryUnitController {
             const { name, alias, sellPrice, buyPrice, productID } = req.body;
             const allbody = { name, alias, sellPrice, buyPrice, productID };
             try {
-                if (!allbody) {
+                if (!name) {
+                    throw { name: "Input body Required" };
+                }
+                if (!alias) {
+                    throw { name: "Input body Required" };
+                }
+                if (!sellPrice) {
+                    throw { name: "Input body Required" };
+                }
+                if (!productID) {
                     throw { name: "Input body Required" };
                 }
                 const foundProduct = yield product_model_1.ProductModel.findById(productID);
+                const itemUnitID = foundProduct.unitID;
+                for (let idUnit of itemUnitID) {
+                    const foundUnit = yield unit_model_1.UnitModel.findById(idUnit);
+                    const foundNameUnit = foundUnit.name.toUpperCase();
+                    const nameCase = name.toUpperCase();
+                    const foundAliasUnit = foundUnit.alias.toUpperCase();
+                    const aliasCase = alias.toUpperCase();
+                    if (foundNameUnit == nameCase) {
+                        throw { name: "Data Has Been Addedd" };
+                    }
+                    if (foundAliasUnit == aliasCase) {
+                        throw { name: "Data Has Been Addedd" };
+                    }
+                }
                 const newUnit = yield unit_model_1.UnitModel.create({
                     name: name,
                     alias: alias,
@@ -45,7 +68,7 @@ class InventoryUnitController {
         });
     }
     static getInventoryUnit(req, res, next) {
-        unit_model_1.UnitModel.find()
+        unit_model_1.UnitModel.find().sort({ created_at: 'desc' })
             .then((resUnit) => {
             res.status(201).json({
                 message: "Success Find All Unit",

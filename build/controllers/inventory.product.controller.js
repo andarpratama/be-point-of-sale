@@ -16,6 +16,7 @@ const product_model_1 = require("../models/product.model");
 const brand_model_1 = require("../models/brand.model");
 const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
+const unit_model_1 = require("../models/unit.model");
 let imageName;
 const storage = multer_1.default.diskStorage({
     destination: './public/img',
@@ -75,6 +76,32 @@ class InventoryProductController {
             }
         });
     }
+    static filterProductByBrand(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const filterProduct = yield product_model_1.ProductModel.find({
+                    'brandID._id': req.params.brand
+                });
+                console.log(filterProduct);
+                // filterProduct.forEach((item:any) => {
+                //    console.log(item.brandID._id)
+                // });
+                // const filterProduct = await ProductModel.find({}).sort({
+                //    soldCount: -1
+                // })
+                res.status(201).json({
+                    success: true,
+                    statusCode: 201,
+                    responseStatus: "Status OK",
+                    message: `Success filter `,
+                    data: filterProduct
+                });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
     static uploadImage(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const productID = req.params.id_product;
@@ -107,7 +134,7 @@ class InventoryProductController {
         });
     }
     static getInventoryProduct(req, res, next) {
-        product_model_1.ProductModel.find()
+        product_model_1.ProductModel.find().sort({ created_at: 'desc' })
             .then((resProduct) => {
             res.status(201).json({
                 message: "Success Find All Product",
@@ -237,6 +264,25 @@ class InventoryProductController {
                     responseStatus: "Status OK",
                     message: "Get Detail Product by Code",
                     data: detailProduct,
+                });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    static getTopTen(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const topTenProduct = yield unit_model_1.UnitModel.find({}).sort({
+                    soldCount: -1
+                }).limit(10);
+                res.status(200).json({
+                    success: true,
+                    statusCode: 200,
+                    responseStatus: "Status OK",
+                    message: "Get Top ten Product",
+                    data: topTenProduct
                 });
             }
             catch (error) {

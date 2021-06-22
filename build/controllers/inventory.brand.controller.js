@@ -36,8 +36,8 @@ class InventoryBrandController {
             function next_id(input) {
                 var output = parseInt(input, 10) + 1; // parse and increment
                 output += ""; // convert to string
-                while (output.length < 2)
-                    output = "00" + output; // prepend leading zeros
+                while (output.length < 3)
+                    output = "0" + output; // prepend leading zeros
                 return output;
             }
             let allBrand = yield brand_model_1.BrandModel.find();
@@ -73,7 +73,7 @@ class InventoryBrandController {
     //============================= END OF CREATE REQUEST ======================
     //============================= READ REQUEST ===============================
     static getInventoryBrand(req, res, next) {
-        brand_model_1.BrandModel.find()
+        brand_model_1.BrandModel.find().sort({ created_at: 'desc' })
             .then((resBrand) => {
             res.status(200).json({
                 success: true,

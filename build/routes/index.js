@@ -17,11 +17,14 @@ const finance_invoice_route_1 = __importDefault(require("./finance.invoice.route
 const company_route_1 = __importDefault(require("./company.route"));
 const purchase_order_route_1 = __importDefault(require("./purchase.order.route"));
 const delivery_order_route_1 = __importDefault(require("./delivery.order.route"));
+const auth_jwt_1 = require("../middlewares/auth.jwt");
+const finance_report_route_1 = __importDefault(require("./finance.report.route"));
 class Routes {
     constructor() {
         this.router = express_1.Router();
         this.home();
         this.auth();
+        this.authentication();
         this.user();
         this.inventoryBrand();
         this.inventoryUnit();
@@ -32,11 +35,16 @@ class Routes {
         this.order();
         this.errorHandler();
         this.finanaceInvoice();
+        this.financeReport();
         this.company();
     }
     /* HOME ----------------------------------------------- */
     home() {
         this.router.get("/", home_route_1.default);
+    }
+    /* AUTH ----------------------------------------------- */
+    authentication() {
+        this.router.use(auth_jwt_1.authJwt.authentication);
     }
     /* AUTH ----------------------------------------------- */
     auth() {
@@ -70,6 +78,9 @@ class Routes {
     /* FINANCE -------------------------------------------- */
     finanaceInvoice() {
         this.router.use("/api/v1/finance", finance_invoice_route_1.default);
+    }
+    financeReport() {
+        this.router.use("/api/v1/finance", finance_report_route_1.default);
     }
     /* ORDER ----------------------------------------------- */
     order() {

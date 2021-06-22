@@ -30,6 +30,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.roleAccess = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
+const user_model_1 = require("../models/user.model");
 class roleAccess {
     static authentication(req, _res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -44,6 +45,29 @@ class roleAccess {
             }
             catch (err) {
                 return next(err);
+            }
+        });
+    }
+    static authorization(req, _res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Ambil req.roleAccess dari header
+                // 
+                const foundUser = yield user_model_1.UserModel.findOne({ _id: req.roleAcess });
+                // User not found, when do query using access token's ID from user model
+                if (!foundUser) {
+                    throw { name: 'Access Token not Assosiated' };
+                }
+                if (String(foundUser._id) === req.params.userID) {
+                    next();
+                }
+                else {
+                    // When found user's ID not match with user's ID from params
+                    throw { name: 'Forbidden Access' };
+                }
+            }
+            catch (err) {
+                next(err);
             }
         });
     }

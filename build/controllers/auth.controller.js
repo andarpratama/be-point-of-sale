@@ -212,6 +212,7 @@ class Auth {
                     message: 'Login Success',
                     data: {
                         User: foundUser._id,
+                        Role: foundUser.role,
                         Authorization: `Bearer ${token}`,
                         RoleAccess: `Bearer ${tokenRole}`,
                         expiresIn: 3600,
