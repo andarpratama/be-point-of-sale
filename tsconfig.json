@@ -8,7 +8,6 @@
         "esModuleInterop": true,
         "strict": true,
         "noImplicitAny": true,
-        "suppressImplicitAnyIndexErrors": true,
         "noImplicitThis": true,
         "strictNullChecks": true,
         "allowSyntheticDefaultImports": true,
