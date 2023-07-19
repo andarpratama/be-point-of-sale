@@ -19,7 +19,7 @@ class App {
       this.app.use(express.json())
       this.app.use(express.urlencoded({ extended: true }))
       this.app.use("/public/img", express.static(path.join("public/img")));
-      mongoConnect()
+      // mongoConnect()
 
       this.app.use((req : Request, res: Response, next: NextFunction) => {
          res.setHeader("Access-Control-Allow-Origin", "*");

@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PORT = exports.APP = void 0;
 const express_1 = __importDefault(require("express"));
-const mongo_connect_1 = __importDefault(require("./config/mongo.connect"));
 const index_1 = __importDefault(require("./routes/index"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
@@ -22,7 +21,7 @@ class App {
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: true }));
         this.app.use("/public/img", express_1.default.static(path_1.default.join("public/img")));
-        mongo_connect_1.default();
+        // mongoConnect()
         this.app.use((req, res, next) => {
             res.setHeader("Access-Control-Allow-Origin", "*");
             res.setHeader("Access-Control-Expose-Headers", "Authorization");
