@@ -8,7 +8,7 @@
     "build": "rimraf dist && tsc",
     "dev": "nodemon ./src/server.ts",
     "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist",
+    "add-build": "git add build",
     "test": "env-cmd -f ./env/test.env jest --watchAll --runInBand"
   },
   "repository": {
